@@ -5,6 +5,7 @@ public class InterSections : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     // get all the connected intersections
+    [SerializeField]
     public InterSections[] sections;
     protected float x;
     protected float y;
