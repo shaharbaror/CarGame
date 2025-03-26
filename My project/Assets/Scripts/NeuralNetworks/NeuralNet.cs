@@ -10,15 +10,15 @@ public class NeuralNet : MonoBehaviour
         layers = new List<Layer>();
     }
     
-    public NeuralNet(int[] layerSizes)
+    public NeuralNet(int inputLayerSize,int[] layerSizes)
     {
 
         layers = new List<Layer>();
 
         // creatre the rest of the layers 
-        for (int i = 1; i < layerSizes.Length - 1; i++)
+        for (int i = 0; i < layerSizes.Length - 1; i++)
         {
-            layers.Add(new Layer(layerSizes[i - 1], layerSizes[i]));
+            layers.Add(new Layer(i == 0? inputLayerSize:layerSizes[i - 1], layerSizes[i]));
         }
 
         // creater an output layer
@@ -78,7 +78,7 @@ public class NeuralNet : MonoBehaviour
 
             for (int j = 0; j < layer.NeuronCount; j++)
             {
-                double delta = error[j] * layer.Activation.Derivative(layer.LastValues[j]); // Sigmoid derivative
+                double delta = error[j] * layer.Activation.Derivative(layer.LastValues[j]); // Sigmoid or ReLU derivative
                 biasGradients[j] = delta;
 
                 for (int k = 0; k < layer.InputSize; k++)

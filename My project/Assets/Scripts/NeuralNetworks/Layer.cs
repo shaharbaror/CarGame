@@ -2,7 +2,7 @@ using UnityEngine;
 using Assets.Scripts.NeuralNetworks.Activations;
 using Assets.Scripts.NeuralNetworks.WeightInits;
 
-public class Layer : MonoBehaviour
+public class Layer
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public double[,] Weights;
@@ -25,6 +25,13 @@ public class Layer : MonoBehaviour
         // get the default initializer based on the activation funciton
         this._WeightInitializer = WeightUtility.GetDefaultInitializer(activation);
 
+        // if the initializer if of a xavierInitializer type
+        if (this._WeightInitializer is XavierInitializer xavier)
+        {
+            xavier.setLayerSize(neuronCount);
+        }
+
+
         Weights = new double[neuronCount, inputSize];
         Biases = new double[neuronCount];
         LastValues = new double[neuronCount];
@@ -35,7 +42,7 @@ public class Layer : MonoBehaviour
     private void InitializeLayer()
     {
         double[] neuronWeights;
-        for (int i =0; i < NeuronCount; i++) {
+        for (int i = 0; i < NeuronCount; i++) {
             // use the initializer to generate the bias
             Biases[i] = this._WeightInitializer.GenerateBias();
 
