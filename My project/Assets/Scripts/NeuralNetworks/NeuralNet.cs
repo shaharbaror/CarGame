@@ -27,7 +27,7 @@ public class NeuralNet : MonoBehaviour
 
     // go through every layer and feed forward the inputs untill
     // the final one
-    public double[] showResults(double[] inputs)
+    public double[] ShowResults(double[] inputs)
     {
 
         // save the input and output layers for the back probagation
@@ -54,10 +54,54 @@ public class NeuralNet : MonoBehaviour
         return loss;
     }
 
-    public void Backpropagate(double[] input, double[] targetOutput)
+
+    public void Backpropagate(double[] input, double[] targetOutput, double learningRate)
     {
-        
+        // Forward pass
+        double[] predictedOutput = this.ShowResults(input);
+
+        // Calculate output layer error
+        double[] outputError = new double[targetOutput.Length];
+        for (int i = 0; i < targetOutput.Length; i++)
+        {
+            outputError[i] = predictedOutput[i] - targetOutput[i];
+        }
+
+        // Backward pass
+        double[] error = outputError;
+        for (int i = layers.Count - 1; i >= 0; i--)
+        {
+            Layer layer = layers[i];
+            double[] newError = new double[layer.InputSize];
+            double[,] weightGradients = new double[layer.NeuronCount, layer.InputSize];
+            double[] biasGradients = new double[layer.NeuronCount];
+
+            for (int j = 0; j < layer.NeuronCount; j++)
+            {
+                double delta = error[j] * layer.Activation.Derivative(layer.LastValues[j]); // Sigmoid derivative
+                biasGradients[j] = delta;
+
+                for (int k = 0; k < layer.InputSize; k++)
+                {
+                    weightGradients[j, k] = delta * layer.LastInputs[k];
+                    newError[k] += delta * layer.Weights[j, k];
+                }
+            }
+
+            // Update weights and biases
+            for (int j = 0; j < layer.NeuronCount; j++)
+            {
+                layer.Biases[j] -= learningRate * biasGradients[j];
+                for (int k = 0; k < layer.InputSize; k++)
+                {
+                    layer.Weights[j, k] -= learningRate * weightGradients[j, k];
+                }
+            }
+
+            error = newError;
+        }
     }
+
 
 
 }

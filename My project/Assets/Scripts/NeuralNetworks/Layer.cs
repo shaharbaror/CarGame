@@ -1,4 +1,6 @@
 using UnityEngine;
+using Assets.Scripts.NeuralNetworks.Activations;
+using Assets.Scripts.NeuralNetworks.WeightInits;
 
 public class Layer : MonoBehaviour
 {
@@ -6,37 +8,51 @@ public class Layer : MonoBehaviour
     public double[,] Weights;
     public double[] Biases;
     public double[] LastValues;                 // contains the values from the last feed forward
+    public double[] LastInputs;
     public int InputSize, NeuronCount;
-    public string ActivationFunction;
+
+    public ActivationFunction Activation { get; private set; }
+    public WeightInitializer _WeightInitializer { get; private set; }
 
 
-    public Layer(int inputSize, int neuronCount, string activationFunction="relu")
+    public Layer(int inputSize, int neuronCount, string activation = "relu")
     {
         this.InputSize = inputSize;
         this.NeuronCount = neuronCount;
-        this.ActivationFunction = activationFunction;
+
+        // if no activation function is provided, use ReLU
+        this.Activation = ActivationUtility.GetActivationFunction(activation);
+        // get the default initializer based on the activation funciton
+        this._WeightInitializer = WeightUtility.GetDefaultInitializer(activation);
 
         Weights = new double[neuronCount, inputSize];
         Biases = new double[neuronCount];
         LastValues = new double[neuronCount];
 
         InitializeLayer();
-        ActivationFunction = activationFunction;
     }
 
     private void InitializeLayer()
     {
+        double[] neuronWeights;
         for (int i =0; i < NeuronCount; i++) {
-            Biases[i] = 0;
+            // use the initializer to generate the bias
+            Biases[i] = this._WeightInitializer.GenerateBias();
+
+            // use the initializer to generate the weights for the neuron
+            neuronWeights = this._WeightInitializer.GenerateWeights(InputSize);
+
             for (int j = 0; j < InputSize; j++)
             {
-                Weights[i, j] = Random.Range(0, 1f);
+                // assign the weight for the neuron
+                Weights[i, j] = neuronWeights[j];
             }
         }
     }
 
     public double[] FeedForward(double[] inputs)
     {
+        this.LastInputs = inputs;
         double[] outputs = new double[NeuronCount];
         for (int i = 0; i < NeuronCount; i++)
         {
@@ -45,19 +61,10 @@ public class Layer : MonoBehaviour
             {
                 sum += Weights[i, j] * inputs[j];
             }
-            outputs[i] = this.ActivationFunction == "relu" ? ReLU(sum) : Sigmoid(sum);
+            outputs[i] = this.Activation.Activate(sum);
             // insert the output into the last values
             LastValues[i] = outputs[i];
         }
         return outputs;
-    }
-
-    private double ReLU(double x)
-    {
-        return x > 0 ? x : 0;
-    }
-    private double Sigmoid(double x)
-    {
-        return 1 / (1 + Mathf.Exp((float)-x));
     }
 }
