@@ -1,16 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
-public class NeuralNet : MonoBehaviour
+public class NeuralNet
 {
     private List<Layer> layers;
     private double[] InputLayer, OutputLayer;
-
-    private void Awake()
-    {
-        layers = new List<Layer>();
-    }
     
-    public NeuralNet(int inputLayerSize,int[] layerSizes)
+    public NeuralNet(int inputLayerSize,int[] layerSizes, int outputLayer)
     {
 
         layers = new List<Layer>();
@@ -22,7 +17,7 @@ public class NeuralNet : MonoBehaviour
         }
 
         // creater an output layer
-        layers.Add(new Layer(layerSizes[layerSizes.Length - 2], layerSizes[layerSizes.Length - 1], "sigmoid"));
+        layers.Add(new Layer(layerSizes[layerSizes.Length - 2], outputLayer, "sigmoid"));
     }
 
     // go through every layer and feed forward the inputs untill
@@ -100,6 +95,26 @@ public class NeuralNet : MonoBehaviour
 
             error = newError;
         }
+    }
+
+    public int GetLayerCount()
+    {
+        return this.layers.Count;
+    }
+
+    public void SetLayerIndex(int index, double[,] weights, double[] biases)
+    {
+        layers[index].SetLayer(weights, biases);
+    }
+
+    public double[,] GetLayerIndexWeights(int index)
+    {
+        return layers[index].Weights;
+    }
+
+    public double[] GetLayerIndexBiases(int index)
+    {
+        return layers[index].Biases;
     }
 
 

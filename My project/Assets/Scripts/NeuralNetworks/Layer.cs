@@ -63,15 +63,40 @@ public class Layer
         double[] outputs = new double[NeuronCount];
         for (int i = 0; i < NeuronCount; i++)
         {
+            // add the bias to the sum
             double sum = Biases[i];
+
             for (int j = 0; j < InputSize; j++)
             {
+                // add the weight * input to the sum
                 sum += Weights[i, j] * inputs[j];
             }
+            // apply the activation function to the sum
             outputs[i] = this.Activation.Activate(sum);
             // insert the output into the last values
             LastValues[i] = outputs[i];
         }
         return outputs;
     }
+
+    public void SetLayer(double[,] weights, double[] biases)
+    {
+        // make sure we can set the layer
+        if (weights.GetLength(1) != this.Weights.GetLength(1) || weights.GetLength(0) != this.Weights.GetLength(0))
+            throw new System.Exception("Cannot Copy weights, Weights of different sizes");
+        if (biases.Length != this.Biases.Length)
+            throw new System.Exception("Cannot Copy weights, Biases of different sizes");
+
+        for (int i = 0; i < weights.GetLength(0); i++)
+        {
+            for (int j = 0; j < weights.GetLength(1); j++)
+            {
+                this.Weights[i, j] = weights[i, j];
+            }
+            this.Biases[i] = biases[i];
+        }
+    
+    }
+
+    public int GetNeuronCount() { return NeuronCount; }
 }
