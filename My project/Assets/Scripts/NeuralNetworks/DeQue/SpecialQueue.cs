@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class SpecialQueue : Deque
 {
+    private int Qlength;
     public SpecialQueue(int maxSize) : base(maxSize)
     {
-
+        Qlength = 0;
     }
 
     // get a number of random elements to be taken from the queue and then clear the queue
@@ -37,7 +38,30 @@ public class SpecialQueue : Deque
     // Clear the Queue
     public void Clear()
     {
+        Qlength = 0;
         queue.Clear();
+    }
+
+    public void ChangeMaxSize(int maxSize)
+    {
+        this.maxSize = maxSize;
+    }
+
+    public void Push(NeuralState value)
+    {
+        base.Push(value);
+        Qlength++;
+    }
+
+    public NeuralState Pop()
+    {
+        Qlength--;
+        return base.Pop();
+    }
+
+    public int Length()
+    {
+        return Qlength;
     }
 
 

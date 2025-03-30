@@ -28,7 +28,7 @@ public class DQN
     public void SetMemory(int maxNumber)
     {
         this.replayMemorySize = maxNumber;
-        Memory = new SpecialQueue(maxNumber);
+        Memory.ChangeMaxSize(maxNumber);
     }
 
     // setting up the Main Values considering the Dictionary does hold every value
@@ -48,6 +48,110 @@ public class DQN
             // sets the weights and biases from Policy to Target
             Target.SetLayerIndex(i, Policy.GetLayerIndexWeights(i), Policy.GetLayerIndexBiases(i));
         }
+    }
+
+    // TODO: need to do this function -------------------------------------------------------------------------
+    public double[] GetState()
+    {
+        // gets some type of state
+        double[] doubles = new double[1];
+        return doubles;
+    }
+
+    // TODO: need to do this function -------------------------------------------------------------------------
+    public (double[], double, bool, bool) ApplyAction(int action)
+    {
+        // do something something to the car Agent and get the values for it
+
+
+
+
+
+        // apply the action to the state
+        double[] newState = GetState();
+        double reward = 0;
+        bool terminated = false;
+        bool success = false;
+        return (newState, reward, terminated, success);
+    }
+
+    public void Train(int episodes)
+    {
+        int stepCount = 0;          // used to keep track of the steps taken for synchronizing the networks
+        int rewardsCount = 0;       // used to keep track of the rewards gained
+
+        double[] curState = null;
+        double[] newState = GetState(); // the input from the 'next' state
+        double[] options = null;
+        int action;
+        double reward;
+        bool terminated, truncated;
+
+        options = this.Policy.ShowResults(newState);
+
+        // do the action
+        action = PreformEpsilonGreedy(options);     // choose an action to do based on an Epsilon Greedy approach
+
+        // move the new state to the current state value
+        curState = newState;
+        (newState, reward, terminated, truncated) = ApplyAction(action);    // currently this doesnt realy do anythin but for now we do this
+
+
+        // add the experiance to the memory
+        this.Memory.Push(new NeuralState(curState, action, reward, newState, terminated));
+
+        for (int i = 0; i < episodes; i++)
+        {
+            terminated = false;
+            truncated = false;      // will activate after a set number of steps
+            rewardsCount = 0;
+            while (!terminated && !truncated)
+            {
+                // get the options from the policy network
+                options = this.Policy.ShowResults(newState);
+                // choose an action to do based on an Epsilon Greedy approach
+                action = PreformEpsilonGreedy(options);
+                // apply the action in the environment and get the resaults
+                curState = newState;
+                (newState, reward, terminated, truncated) = ApplyAction(action);
+
+                // add the experiance to the memory
+                this.Memory.Push(new NeuralState(curState, action, reward, newState, terminated));
+
+                stepCount++;
+                if (reward > 0) rewardsCount++;
+            }
+            
+
+
+            // check if there is enough memory to train the network
+            if (this.Memory.Length() > this.batchSize && rewardsCount > 0)
+            {
+                // get a random batch of experiances from the memory
+                NeuralState[] batch = this.Memory.ClearAtRandom(this.batchSize);
+                // train the network with the batch
+                    // TODO: create the Train the network function
+            }
+        }
+
+
+
+    }
+
+    private int PreformEpsilonGreedy(double[] options) { 
+        if (Random.Range(0f, 1f) > 0.5f)
+        {
+            // preform the best action
+            int maximum = 0;
+            for (int i =1; i< options.Length; i++)
+            {
+                if (options[i] > options[maximum]) maximum = i;
+
+            }
+            return maximum;
+        }
+        return Random.Range(0, options.Length);
+
     }
 
 
