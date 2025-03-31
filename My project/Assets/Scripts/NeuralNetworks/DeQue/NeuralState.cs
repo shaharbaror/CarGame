@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class NeuralState 
 {
-    public double[] state, newState;
+    public float[] state, newState;
     public int action;
-    public double reward;
+    public float reward;
     public bool terminated;
 
-    public NeuralState(double[] state, int action, double reward, double[] newState, bool terminated)
+    public NeuralState(float[] state, int action, float reward, float[] newState, bool terminated)
     {
         this.state = state;
         this.action = action;

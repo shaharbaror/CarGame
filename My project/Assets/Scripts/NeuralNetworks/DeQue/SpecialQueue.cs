@@ -47,13 +47,13 @@ public class SpecialQueue : Deque
         this.maxSize = maxSize;
     }
 
-    public void Push(NeuralState value)
+    public void PushQueue(NeuralState value)
     {
         base.Push(value);
         Qlength++;
     }
 
-    public NeuralState Pop()
+    public NeuralState PopQueue()
     {
         Qlength--;
         return base.Pop();

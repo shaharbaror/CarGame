@@ -9,9 +9,9 @@ namespace Assets.Scripts.NeuralNetworks.WeightInits
     public abstract class WeightInitializer
     {
         // Generate Weight for a specific neuron
-        public abstract double[] GenerateWeights(int inputSize);
+        public abstract float[] GenerateWeights(int inputSize);
 
         // Generate Bias for a specific neuron
-        public abstract double GenerateBias();
+        public abstract float GenerateBias();
     }
 }

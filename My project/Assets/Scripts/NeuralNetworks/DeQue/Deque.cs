@@ -13,7 +13,8 @@ public class Deque : IEnumerable<NeuralState>
         queue = new Queue<NeuralState>(maxSize);
     }
 
-    public void Push(NeuralState value)
+    
+     public void Push(NeuralState value)
     {
         if (queue.Count == maxSize)
         {

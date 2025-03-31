@@ -523,15 +523,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 95.06
+      value: 109.49
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0000052452087
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 122.15
+      value: 16.09
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -569,7 +569,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -2715204995951423239, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
@@ -597,6 +598,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5252282590161985829, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3871768556047484477}
+    - targetCorrespondingSourceObject: {fileID: 5252282590161985829, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 300131845903885032}
+    - targetCorrespondingSourceObject: {fileID: 5252282590161985829, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3917961754724406673}
   m_SourcePrefab: {fileID: 100100000, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
 --- !u!4 &4110762519932337713 stripped
 Transform:
@@ -685,6 +692,47 @@ MonoBehaviour:
   steeringRange: 40
   steeringRangeAtMaxSpeed: 10
   centreOfGravityOffset: -1
+  carSpeed: 0
+  curSteer: 0
+  wheels: []
+--- !u!114 &300131845903885032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6820698318962358111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 035cfc80308fb8d4db8ff8de41996ec9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carControl: {fileID: 3871768556047484477}
+  carRaycaster: {fileID: 3917961754724406673}
+  _inputLayer: 5
+  _layers: 200000002000000010000000
+  learningRate: 0.8
+  discountFactor: 0.99
+  networkSyncRate: 100
+  replayMemorySize: 1000
+  batchSize: 32
+  cooldown: 0.5
+--- !u!114 &3917961754724406673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6820698318962358111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d88513106f971224a94c9f1c2f983ae6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rayCount: 20
+  rayLength: 20
+  rayAngleSpread: 230
+  carControl: {fileID: 3871768556047484477}
 --- !u!4 &8427522384474305230 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7111383093612012724, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}

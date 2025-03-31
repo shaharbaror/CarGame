@@ -8,11 +8,11 @@ namespace Assets.Scripts.NeuralNetworks.Activations
 {
     internal class SigmoidActivation : ActivationFunction
     {
-        public override double Activate(double value)
+        public override float Activate(float value)
         {
-            return 1 / (1 + Math.Exp((float)-value));
+            return (float)(1 / (1 + Math.Exp((double)-value)));
         }
-        public override double Derivative(double value)
+        public override float Derivative(float value)
         {
             return value * (1 - value);
         }

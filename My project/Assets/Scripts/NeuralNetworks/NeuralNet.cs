@@ -3,7 +3,7 @@ using System.Collections.Generic;
 public class NeuralNet
 {
     private List<Layer> layers;
-    private double[] InputLayer, OutputLayer;
+    private float[] InputLayer, OutputLayer;
     
     public NeuralNet(int inputLayerSize,int[] layerSizes, int outputLayer)
     {
@@ -13,7 +13,7 @@ public class NeuralNet
         // creatre the rest of the layers 
         for (int i = 0; i < layerSizes.Length - 1; i++)
         {
-            layers.Add(new Layer(i == 0? inputLayerSize:layerSizes[i - 1], layerSizes[i]));
+            layers.Add(new Layer(i == 0? inputLayerSize:layerSizes[i - 1], layerSizes[i], "sigmoid"));
         }
 
         // creater an output layer
@@ -22,7 +22,7 @@ public class NeuralNet
 
     // go through every layer and feed forward the inputs untill
     // the final one
-    public double[] ShowResults(double[] inputs)
+    public float[] ShowResults(float[] inputs)
     {
 
         // save the input and output layers for the back probagation
@@ -39,41 +39,41 @@ public class NeuralNet
 
 
     // compute the loss of the network
-    public double ComputeLoss(double[] predicted, double[] target)
+    public float ComputeLoss(float[] predicted, float[] target)
     {
-        double loss = 0;
+        float loss = 0;
         for (int i = 0; i < predicted.Length; i++)
         {
-            loss += Mathf.Pow((float)(predicted[i] - target[i]), 2);
+            loss += Mathf.Pow(predicted[i] - target[i], 2);
         }
         return loss;
     }
 
 
-    public void Backpropagate(double[] input, double[] targetOutput, double learningRate)
+    public void Backpropagate(float[] input, float[] targetOutput, float learningRate)
     {
         // Forward pass
-        double[] predictedOutput = this.ShowResults(input);
+        float[] predictedOutput = this.ShowResults(input);
 
         // Calculate output layer error
-        double[] outputError = new double[targetOutput.Length];
+        float[] outputError = new float[targetOutput.Length];
         for (int i = 0; i < targetOutput.Length; i++)
         {
             outputError[i] = predictedOutput[i] - targetOutput[i];
         }
 
         // Backward pass
-        double[] error = outputError;
+        float[] error = outputError;
         for (int i = layers.Count - 1; i >= 0; i--)
         {
             Layer layer = layers[i];
-            double[] newError = new double[layer.InputSize];
-            double[,] weightGradients = new double[layer.NeuronCount, layer.InputSize];
-            double[] biasGradients = new double[layer.NeuronCount];
+            float[] newError = new float[layer.InputSize];
+            float[,] weightGradients = new float[layer.NeuronCount, layer.InputSize];
+            float[] biasGradients = new float[layer.NeuronCount];
 
             for (int j = 0; j < layer.NeuronCount; j++)
             {
-                double delta = error[j] * layer.Activation.Derivative(layer.LastValues[j]); // Sigmoid or ReLU derivative
+                float delta = error[j] * layer.Activation.Derivative(layer.LastValues[j]); // Sigmoid or ReLU derivative
                 biasGradients[j] = delta;
 
                 for (int k = 0; k < layer.InputSize; k++)
@@ -102,17 +102,17 @@ public class NeuralNet
         return this.layers.Count;
     }
 
-    public void SetLayerIndex(int index, double[,] weights, double[] biases)
+    public void SetLayerIndex(int index, float[,] weights, float[] biases)
     {
         layers[index].SetLayer(weights, biases);
     }
 
-    public double[,] GetLayerIndexWeights(int index)
+    public float[,] GetLayerIndexWeights(int index)
     {
         return layers[index].Weights;
     }
 
-    public double[] GetLayerIndexBiases(int index)
+    public float[] GetLayerIndexBiases(int index)
     {
         return layers[index].Biases;
     }

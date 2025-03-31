@@ -9,9 +9,9 @@ namespace Assets.Scripts.NeuralNetworks.Activations
     public abstract class ActivationFunction
     {
         // Forward activation method
-        public abstract double Activate(double value);
+        public abstract float Activate(float value);
 
         // Derivative of the activation function
-        public abstract double Derivative(double value);
+        public abstract float Derivative(float value);
     }
 }

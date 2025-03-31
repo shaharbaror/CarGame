@@ -5,10 +5,10 @@ using Assets.Scripts.NeuralNetworks.WeightInits;
 public class Layer
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public double[,] Weights;
-    public double[] Biases;
-    public double[] LastValues;                 // contains the values from the last feed forward
-    public double[] LastInputs;
+    public float[,] Weights;
+    public float[] Biases;
+    public float[] LastValues;                 // contains the values from the last feed forward
+    public float[] LastInputs;
     public int InputSize, NeuronCount;
 
     public ActivationFunction Activation { get; private set; }
@@ -32,16 +32,16 @@ public class Layer
         }
 
 
-        Weights = new double[neuronCount, inputSize];
-        Biases = new double[neuronCount];
-        LastValues = new double[neuronCount];
+        Weights = new float[neuronCount, inputSize];
+        Biases = new float[neuronCount];
+        LastValues = new float[neuronCount];
 
         InitializeLayer();
     }
 
     private void InitializeLayer()
     {
-        double[] neuronWeights;
+        float[] neuronWeights;
         for (int i = 0; i < NeuronCount; i++) {
             // use the initializer to generate the bias
             Biases[i] = this._WeightInitializer.GenerateBias();
@@ -57,14 +57,14 @@ public class Layer
         }
     }
 
-    public double[] FeedForward(double[] inputs)
+    public float[] FeedForward(float[] inputs)
     {
         this.LastInputs = inputs;
-        double[] outputs = new double[NeuronCount];
+        float[] outputs = new float[NeuronCount];
         for (int i = 0; i < NeuronCount; i++)
         {
             // add the bias to the sum
-            double sum = Biases[i];
+            float sum = Biases[i];
 
             for (int j = 0; j < InputSize; j++)
             {
@@ -79,7 +79,7 @@ public class Layer
         return outputs;
     }
 
-    public void SetLayer(double[,] weights, double[] biases)
+    public void SetLayer(float[,] weights, float[] biases)
     {
         // make sure we can set the layer
         if (weights.GetLength(1) != this.Weights.GetLength(1) || weights.GetLength(0) != this.Weights.GetLength(0))

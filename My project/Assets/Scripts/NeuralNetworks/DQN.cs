@@ -7,11 +7,11 @@ public class DQN
     private NeuralNet Policy, Target;
     private SpecialQueue Memory;
 
-    private double learningRate, discountFactor;
+    private float learningRate, discountFactor;
     private int networkSyncRate, replayMemorySize, batchSize;
 
     // initialization
-    public DQN(int inputLayer, int[] hiddenLayer, int outputLayer, Dictionary<string, (int, double)> parameters)
+    public DQN(int inputLayer, int[] hiddenLayer, int outputLayer, Dictionary<string, (int, float)> parameters)
     {
         Policy = new NeuralNet(inputLayer, hiddenLayer, outputLayer);
         Target = new NeuralNet(inputLayer, hiddenLayer, outputLayer);
@@ -32,7 +32,7 @@ public class DQN
     }
 
     // setting up the Main Values considering the Dictionary does hold every value
-    public void SetMainValues(Dictionary<string, (int, double)> p)
+    public void SetMainValues(Dictionary<string, (int, float)> p)
     {
         this.learningRate = p["learningRate"].Item2;
         this.discountFactor = p["discountFactor"].Item2;
@@ -51,36 +51,38 @@ public class DQN
     }
 
     // TODO: need to do this function -------------------------------------------------------------------------
-    public double[] GetState()
-    {
-        // gets some type of state
-        double[] doubles = new double[1];
-        return doubles;
-    }
+    //public double[] GetState()
+    //{
+    //    // gets some type of state
+    //    double[] doubles = new double[1];
+    //    return doubles;
+    //}
 
     // TODO: need to do this function -------------------------------------------------------------------------
-    public (double[], double, bool, bool) ApplyAction(int action)
-    {
-        // do something something to the car Agent and get the values for it
+    //public (double[], double, bool, bool) ApplyAction(int action)
+    //{
+    //    // do something something to the car Agent and get the values for it
 
 
 
 
 
-        // apply the action to the state
-        double[] newState = GetState();
-        double reward = 0;
-        bool terminated = false;
-        bool success = false;
-        return (newState, reward, terminated, success);
-    }
+    //    // apply the action to the state
+    //    double[] newState = GetState();
+    //    double reward = 0;
+    //    bool terminated = false;
+    //    bool success = false;
+    //    return (newState, reward, terminated, success);
+    //}
 
     // gets a state and returns an action
-    public int GetAction(double[] state)
+    public int GetAction(float[] state)
     {
-        double[] options = this.Policy.ShowResults(state);
+        float[] options = this.Policy.ShowResults(state);
         return PreformEpsilonGreedy(options);
     }
+
+    /*
 
     public void Train(int episodes)
     {
@@ -152,32 +154,33 @@ public class DQN
 
 
     }
+    */
 
     // train the network with a batch of experiances
     private void TeachTheNetwork(NeuralState[] batch)
     {
         // get the target values for the batch
-        double[] targetValues = new double[batch.Length];
-        double[] predictedValues = new double[batch.Length];
+        float[] targetValues = new float[batch.Length];
+        float[] predictedValues = new float[batch.Length];
         for (int i = 0; i < batch.Length; i++)
         {
             targetValues[i] = batch[i].reward;
             if (!batch[i].terminated)
             {
-                double[] options = this.Target.ShowResults(batch[i].newState);
+                float[] options = this.Target.ShowResults(batch[i].newState);
                 targetValues[i] += this.discountFactor * options[PreformEpsilonGreedy(options)];
             }
             predictedValues[i] = this.Policy.ShowResults(batch[i].state)[batch[i].action];
         }
         // calculate the loss of the network
-        double loss = this.Policy.ComputeLoss(predictedValues, targetValues);
+        float loss = this.Policy.ComputeLoss(predictedValues, targetValues);
         // backpropagate the loss
         this.Policy.Backpropagate(batch[0].state, targetValues, this.learningRate);
     }
 
 
 
-    private int PreformEpsilonGreedy(double[] options) { 
+    private int PreformEpsilonGreedy(float[] options) { 
         if (Random.Range(0f, 1f) > 0.5f)
         {
             // preform the best action
