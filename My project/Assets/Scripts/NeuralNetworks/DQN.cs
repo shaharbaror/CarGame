@@ -75,6 +75,13 @@ public class DQN
         return (newState, reward, terminated, success);
     }
 
+    // gets a state and returns an action
+    public int GetAction(double[] state)
+    {
+        double[] options = this.Policy.ShowResults(state);
+        return PreformEpsilonGreedy(options);
+    }
+
     public void Train(int episodes)
     {
         int stepCount = 0;          // used to keep track of the steps taken for synchronizing the networks
@@ -131,12 +138,44 @@ public class DQN
                 NeuralState[] batch = this.Memory.ClearAtRandom(this.batchSize);
                 // train the network with the batch
                     // TODO: create the Train the network function
+                    TeachTheNetwork(batch);
+            }
+
+            // update the target network with the policy network
+            if (stepCount > this.networkSyncRate)
+            {
+                UpdateTarget();
+                stepCount = 0;
             }
         }
 
 
 
     }
+
+    // train the network with a batch of experiances
+    private void TeachTheNetwork(NeuralState[] batch)
+    {
+        // get the target values for the batch
+        double[] targetValues = new double[batch.Length];
+        double[] predictedValues = new double[batch.Length];
+        for (int i = 0; i < batch.Length; i++)
+        {
+            targetValues[i] = batch[i].reward;
+            if (!batch[i].terminated)
+            {
+                double[] options = this.Target.ShowResults(batch[i].newState);
+                targetValues[i] += this.discountFactor * options[PreformEpsilonGreedy(options)];
+            }
+            predictedValues[i] = this.Policy.ShowResults(batch[i].state)[batch[i].action];
+        }
+        // calculate the loss of the network
+        double loss = this.Policy.ComputeLoss(predictedValues, targetValues);
+        // backpropagate the loss
+        this.Policy.Backpropagate(batch[0].state, targetValues, this.learningRate);
+    }
+
+
 
     private int PreformEpsilonGreedy(double[] options) { 
         if (Random.Range(0f, 1f) > 0.5f)
