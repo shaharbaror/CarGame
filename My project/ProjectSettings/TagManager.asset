@@ -6,6 +6,7 @@ TagManager:
   tags:
   - BadWall
   - Good Wall
+  - Car
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - UI
   - Good Layer
   - Bad Layer
-  - 
+  - Car
   - 
   - 
   - 

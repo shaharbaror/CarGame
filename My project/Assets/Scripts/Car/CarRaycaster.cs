@@ -17,29 +17,66 @@ public class CarRaycaster : MonoBehaviour
         raycastHits = new RaycastHit[rayCount];
     }
 
-    public float[] GetRaycastObservations()
+    //public float[] GetRaycastObservations()
+    //{
+    //    float angleStep = rayAngleSpread / (rayCount - 1);
+    //    for (int i = 0; i < rayCount; i++)
+    //    {
+    //        float angle = -rayAngleSpread / 2 + i * angleStep;
+    //        Vector3 rayDirection = Quaternion.Euler(0, angle, 0) * transform.forward;
+    //        int hits = Physics.RaycastNonAlloc(transform.position, rayDirection, raycastHits, rayLength);
+    //        if (hits > 0)
+    //        {
+    //            Debug.DrawRay(transform.position, rayDirection * raycastHits[0].distance, Color.red); // Draw red if hit
+    //            rayDistances[i] = raycastHits[i].distance / rayLength; // Normalized distance
+    //        }
+    //        else
+    //        {
+    //            Debug.DrawRay(transform.position, rayDirection * rayLength, Color.green); // Draw green if no hit
+    //            rayDistances[i] = 1f; // Max distance if no hit
+    //        }
+    //    }
+    //    return rayDistances;
+    //}
+    
+
+public float[] GetRaycastObservations()
+{
+    float angleStep = rayAngleSpread / (rayCount - 1);
+    for (int i = 0; i < rayCount; i++)
     {
-        float angleStep = rayAngleSpread / (rayCount - 1);
-        for (int i = 0; i < rayCount; i++)
+        float angle = -rayAngleSpread / 2 + i * angleStep;
+        Vector3 rayDirection = Quaternion.Euler(0, angle, 0) * transform.forward;
+
+        int layerMask = LayerMask.GetMask("Bad Layer"); // Get the layer mask for "BadLayer"
+
+        int hits = Physics.RaycastNonAlloc(transform.position, rayDirection, raycastHits, rayLength, layerMask);
+
+        if (hits > 0)
         {
-            float angle = -rayAngleSpread / 2 + i * angleStep;
-            Vector3 rayDirection = Quaternion.Euler(0, angle, 0) * transform.forward;
-            int hits = Physics.RaycastNonAlloc(transform.position, rayDirection, raycastHits, rayLength);
-            if (hits > 0)
+            //Check if the hit object has the correct tag. This is redundant if your layer mask is set up correctly, but a good safety measure.
+            if (raycastHits[0].collider.gameObject.CompareTag("BadWall"))
             {
                 Debug.DrawRay(transform.position, rayDirection * raycastHits[0].distance, Color.red); // Draw red if hit
-                rayDistances[i] = raycastHits[i].distance / rayLength; // Normalized distance
+                rayDistances[i] = raycastHits[0].distance / rayLength; // Normalized distance
             }
             else
             {
                 Debug.DrawRay(transform.position, rayDirection * rayLength, Color.green); // Draw green if no hit
-                rayDistances[i] = 1f; // Max distance if no hit
+                rayDistances[i] = 1f; // Max distance if no hit.
             }
-        }
-        return rayDistances;
-    }
 
-    public float[] GetNetworkInput()
+        }
+        else
+        {
+            Debug.DrawRay(transform.position, rayDirection * rayLength, Color.green); // Draw green if no hit
+            rayDistances[i] = 1f; // Max distance if no hit
+        }
+    }
+    return rayDistances;
+}
+
+public float[] GetNetworkInput()
     {
         float speed = carControl.carSpeed / carControl.maxSpeed;
         float[] raycasts = GetRaycastObservations();

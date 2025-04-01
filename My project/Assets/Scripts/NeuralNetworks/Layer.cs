@@ -1,6 +1,7 @@
 using UnityEngine;
 using Assets.Scripts.NeuralNetworks.Activations;
 using Assets.Scripts.NeuralNetworks.WeightInits;
+using Unity.VisualScripting.FullSerializer;
 
 public class Layer
 {
@@ -59,6 +60,11 @@ public class Layer
 
     public float[] FeedForward(float[] inputs)
     {
+        if (inputs.Length != InputSize)
+        {
+            
+            Debug.LogError("Input size does not match the layer size");
+        }
         this.LastInputs = inputs;
         float[] outputs = new float[NeuronCount];
         for (int i = 0; i < NeuronCount; i++)
@@ -99,4 +105,6 @@ public class Layer
     }
 
     public int GetNeuronCount() { return NeuronCount; }
+
+    
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DQN
 {
-    private NeuralNet Policy, Target;
+    public NeuralNet Policy, Target;
     private SpecialQueue Memory;
 
     private float learningRate, discountFactor;
@@ -16,7 +16,7 @@ public class DQN
         Policy = new NeuralNet(inputLayer, hiddenLayer, outputLayer);
         Target = new NeuralNet(inputLayer, hiddenLayer, outputLayer);
 
-        UpdateTarget();
+        CopyNetworks(Policy, Target);
 
         this.SetMainValues(parameters);
         this.Memory = new SpecialQueue(this.replayMemorySize);
@@ -41,13 +41,18 @@ public class DQN
         this.batchSize = p["batchSize"].Item1;
     }
 
-    private void UpdateTarget()
+    private void CopyNetworks(NeuralNet p, NeuralNet t)
     {         // update the target network with the policy network
-        for (int i = 0; i < Policy.GetLayerCount(); i++)
+        for (int i = 0; i < p.GetLayerCount(); i++)
         {
             // sets the weights and biases from Policy to Target
-            Target.SetLayerIndex(i, Policy.GetLayerIndexWeights(i), Policy.GetLayerIndexBiases(i));
+            t.SetLayerIndex(i, p.GetLayerIndexWeights(i), p.GetLayerIndexBiases(i));
         }
+    }
+
+    public void UpdateTarget()
+    {
+        CopyNetworks(Policy, Target);
     }
 
     // TODO: need to do this function -------------------------------------------------------------------------
@@ -157,25 +162,49 @@ public class DQN
     */
 
     // train the network with a batch of experiances
-    public void TeachTheNetwork(NeuralState[] batch)
+    //public void TeachTheNetwork(NeuralState[] batch)
+    //{
+    //    // get the target values for the batch
+    //    float[] targetValues = new float[batch.Length];
+    //    float[] predictedValues = new float[batch.Length];
+    //    for (int i = 0; i < batch.Length; i++)
+    //    {
+    //        targetValues[i] = batch[i].reward;
+    //        if (!batch[i].terminated)
+    //        {
+    //            float[] options = this.Target.ShowResults(batch[i].newState);
+    //            targetValues[i] += this.discountFactor * options[PreformEpsilonGreedy(options)];
+    //        }
+    //        predictedValues[i] = this.Policy.ShowResults(batch[i].state)[batch[i].action];
+    //    }
+    //    // calculate the loss of the network
+    //    float loss = this.Policy.ComputeLoss(predictedValues, targetValues);
+    //    // backpropagate the loss
+    //    this.Policy.Backpropagate(batch[0].state, targetValues, this.learningRate);
+    //}
+
+    public void TeachTheNetwork(NeuralState[] batchs)
     {
-        // get the target values for the batch
-        float[] targetValues = new float[batch.Length];
-        float[] predictedValues = new float[batch.Length];
-        for (int i = 0; i < batch.Length; i++)
+        //Debug.Log("Teaching the Network");
+        foreach (NeuralState batch in batchs)
         {
-            targetValues[i] = batch[i].reward;
-            if (!batch[i].terminated)
+            float targetValue = 0;
+            if (!batch.terminated)
             {
-                float[] options = this.Target.ShowResults(batch[i].newState);
-                targetValues[i] += this.discountFactor * options[PreformEpsilonGreedy(options)];
+                float[] options = this.Target.ShowResults(batch.newState);
+                targetValue = batch.reward + this.discountFactor * options[PreformEpsilonGreedy(options)];
             }
-            predictedValues[i] = this.Policy.ShowResults(batch[i].state)[batch[i].action];
+            float[] currentQValues = this.Policy.ShowResults(batch.state);
+
+            float[] targetQValues = (float[])currentQValues.Clone();
+            targetQValues[batch.action] = targetValue;
+            for (int i = 0; i < targetQValues.Length; i++)
+            {
+                Debug.Log(targetQValues[i] - currentQValues[i]);
+            }
+
+            this.Policy.Backpropagate(batch.state, targetQValues, this.learningRate);
         }
-        // calculate the loss of the network
-        float loss = this.Policy.ComputeLoss(predictedValues, targetValues);
-        // backpropagate the loss
-        this.Policy.Backpropagate(batch[0].state, targetValues, this.learningRate);
     }
 
 
@@ -193,6 +222,18 @@ public class DQN
             return maximum;
         }
         return Random.Range(0, options.Length);
+
+    }
+
+    public void Clone(DQN dqn)
+    {
+        CopyNetworks(dqn.Policy, this.Policy);
+        CopyNetworks(dqn.Target, this.Target);
+        this.learningRate = dqn.learningRate;
+        this.discountFactor = dqn.discountFactor;
+        this.networkSyncRate = dqn.networkSyncRate;
+        this.replayMemorySize = dqn.replayMemorySize;
+        this.batchSize = dqn.batchSize;
 
     }
 

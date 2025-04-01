@@ -3,11 +3,12 @@ using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using System.Linq;
 using Unity.MLAgents.Actuators;
+using UnityEngine.UIElements;
 
 public class CarAgent : MonoBehaviour
 {
     private DQN WheelDqn, MotorDqn;
-    private SpecialQueue WheelMemory, MotorMemory;
+    public SpecialQueue WheelMemory, MotorMemory;
 
 
     public CarControl carControl;
@@ -21,10 +22,12 @@ public class CarAgent : MonoBehaviour
     public float discountFactor = 0.9f;
     public int networkSyncRate = 100;
     public int replayMemorySize = 1000;
-    public int batchSize = 32;
+    public int batchSize = 128;
 
     public float cooldown = 100f;
     private float lastTime = 0;
+
+    public float SPEEEDUWAGOOON = 10f;
 
     int wheelAction;
     int motorAction;
@@ -35,7 +38,9 @@ public class CarAgent : MonoBehaviour
 
 
     private float _motorReward = 0f;
-    private float _wheelReward = 0f;
+    public float _wheelReward = 0f;
+    private int _motorRewardCount = 0;
+    private int _wheelRewardCount = 0;
     private float[] _lastState;
     private float[] _currentState;
 
@@ -43,7 +48,7 @@ public class CarAgent : MonoBehaviour
 
 
 
-    public void Start()
+    public void Awake()
     {
 
         // Create the Ray Perception Sensor
@@ -59,30 +64,31 @@ public class CarAgent : MonoBehaviour
             Debug.Log("No Connection with the Car Raycaster");
         }
 
-        //_inputLayer = carRaycaster.GetInputSize();
+        _inputLayer = carRaycaster.GetInputSize();
 
         //// Create the DQN
         //// The DQN network for the Wheels
-        //WheelDqn = new DQN(_inputLayer, _layers, 5, new System.Collections.Generic.Dictionary<string, (int, float)>{
-        //    {"learningRate", (0, learningRate)},
-        //    {"discountFactor", (0, discountFactor)},
-        //    {"netwrokSyncRate", (networkSyncRate, 0)},
-        //    {"replayMemorySize", (replayMemorySize, 0)},
-        //    {"batchSize", (batchSize, 0)}
-        //});
+        WheelDqn = new DQN(_inputLayer, _layers, 5, new System.Collections.Generic.Dictionary<string, (int, float)>{
+            {"learningRate", (0, learningRate)},
+            {"discountFactor", (0, discountFactor)},
+            {"netwrokSyncRate", (networkSyncRate, 0)},
+            {"replayMemorySize", (replayMemorySize, 0)},
+            {"batchSize", (batchSize, 0)}
+        });
 
-        //// The DQN network for the Motors
-        //MotorDqn = new DQN(_inputLayer, _layers, 5, new System.Collections.Generic.Dictionary<string, (int, float)>{
-        //    {"learningRate", (0, learningRate)},
-        //    {"discountFactor", (0, discountFactor)},
-        //    {"netwrokSyncRate", (networkSyncRate, 0)},
-        //    {"replayMemorySize", (replayMemorySize, 0)},
-        //    {"batchSize", (batchSize, 0)}
-        //});
+        // The DQN network for the Motors
+        MotorDqn = new DQN(_inputLayer, _layers, 5, new System.Collections.Generic.Dictionary<string, (int, float)>{
+            {"learningRate", (0, learningRate)},
+            {"discountFactor", (0, discountFactor)},
+            {"netwrokSyncRate", (networkSyncRate, 0)},
+            {"replayMemorySize", (replayMemorySize, 0)},
+            {"batchSize", (batchSize, 0)}
+        });
 
+        WheelMemory = new SpecialQueue(replayMemorySize);
+        MotorMemory = new SpecialQueue(replayMemorySize);
 
-
-
+        
         
         }
 
@@ -119,31 +125,32 @@ public class CarAgent : MonoBehaviour
 
     public void PreformMotorAction(int action)
     {
-        switch (action)
-        {
-            case 0:
+        //switch (action)
+        //{
+        //    case 0:
                 
-                // Hard Acceleration
-                carControl.Accelerate(true);
-                break;
-            case 1:
+        //        // Hard Acceleration
+        //        carControl.Accelerate(true);
+        //        break;
+        //    case 1:
                 
-                // Soft Acceleration
-                carControl.Accelerate(false);
-                break;
-            case 2:
-                // Soft Brake
-                carControl.Brake(false);
-                break;
-            case 3:
-                // Hard brake
-                carControl.Brake(true);
-                break;
-            default:
+        //        // Soft Acceleration
+        //        carControl.Accelerate(false);
+        //        break;
+        //    case 2:
+        //        // Soft Brake
+        //        carControl.Brake(false);
+        //        break;
+        //    case 3:
+        //        // Hard brake
+        //        carControl.Brake(true);
+        //        break;
+        //    default:
                 
-                // Do nothing, keep the same speed
-                break;
-        }
+        //        // Do nothing, keep the same speed
+        //        break;
+        //}
+        carControl.Accelerate(false);
     }
 
     public void Update()
@@ -156,10 +163,18 @@ public class CarAgent : MonoBehaviour
 
                 CalculateMotorReward();
                 CalculateWheelReward();
+                if (_motorReward > 0)
+                {
+                    _motorRewardCount++;
+                }
+                if (_wheelReward > 0)
+                {
+                    _wheelRewardCount++;
+                }
                 // Get the state from the ray sensor
                 float[] state = carRaycaster.GetNetworkInput();
                 _currentState = state;
-
+                
                 MotorMemory.PushQueue(new NeuralState(_lastState, motorAction, _motorReward, _currentState, false));
                 WheelMemory.PushQueue(new NeuralState(_lastState, wheelAction, _wheelReward, _currentState, false));
 
@@ -188,6 +203,16 @@ public class CarAgent : MonoBehaviour
             WheelMemory.PushQueue(new NeuralState(_lastState, wheelAction, _wheelReward, _currentState, true));
             once = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Time.timeScale += 1;
+
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+        {
+            Time.timeScale -= 1;
+        }
         //else
         //{
         //    PreformWheelAction(wheelAction);
@@ -209,20 +234,21 @@ public class CarAgent : MonoBehaviour
 
     }
 
-    public void GetData(DQN wheels, DQN motors, SpecialQueue wheelMem, SpecialQueue motorMem)
+    public void GetData(DQN wheels, DQN motors)
     {
-        wheels = WheelDqn;
-        motors = MotorDqn;
-        wheelMem = WheelMemory;
-        motorMem = MotorMemory;
+        WheelDqn.Clone(wheels);
+        MotorDqn.Clone(motors);
     }
 
 
     private void CalculateMotorReward()
     {
-         
+         if (carControl.carSpeed >0)
         _motorReward += carControl.carSpeed * 0.01f;
-
+        else
+        {
+            _motorReward -= 0.1f;
+        }
     }
 
     private void CalculateWheelReward()
@@ -234,9 +260,14 @@ public class CarAgent : MonoBehaviour
         RaycastHit hRight, hLeft;
         float distance = 20f;
         Physics.Raycast(transform.position, right, out hRight, distance);
+        Debug.DrawRay(transform.position, right * hRight.distance, Color.red);
         Physics.Raycast(transform.position, left, out hLeft, distance);
-        _wheelReward += Mathf.Lerp(0, 1, (Mathf.Min(hRight.distance, hLeft.distance) / Mathf.Max(hRight.distance, hLeft.distance))); // adds between 0 to 1 depends on the distance from the center
-
+        Debug.DrawRay(transform.position, left * hLeft.distance, Color.red);
+        if (carControl.carSpeed > 0)
+        {
+            _wheelReward += Mathf.Min(hRight.distance, hLeft.distance) / Mathf.Max(hRight.distance, hLeft.distance) * 3; // adds between 0 to 1 depends on the distance from the center
+            
+        }
 
     }
 
@@ -245,21 +276,40 @@ public class CarAgent : MonoBehaviour
         
         if (collision.gameObject.CompareTag("BadWall"))
         {
-            _motorReward -= 10f;
+            //_motorReward -= 10f;
             _wheelReward -= 10f;
             sessionPlaying = false;
         }
-        
-        
-            
-        
+        if (collision.gameObject.CompareTag("Good Wall"))
+        {
+            //_motorReward += 10f;
+            _wheelReward += 10f;
+            sessionPlaying = false;
+        }
+
+
+
+
     }
 
-    public void ResetCar()
+    public void ResetCar(bool isMemory)
     {
         carControl.ResetCar();
         sessionPlaying = true;
         once = true;
+        _actionCount = 0;
+        _motorRewardCount = 0;
+        _wheelRewardCount = 0;
+        if (isMemory)
+        {
+            MotorMemory.Clear();
+            WheelMemory.Clear();
+        }
+    }
+
+    public (NeuralState[], NeuralState[]) GiveMemoriesBatch()
+    {
+        return (MotorMemory.ClearAtRandom(batchSize), WheelMemory.ClearAtRandom(batchSize));
     }
 
 

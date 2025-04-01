@@ -14,6 +14,7 @@ public class SpecialQueue : Deque
         int[] randoms = new int[objNumber + 1];
         NeuralState[] result = new NeuralState[objNumber];
         QueueIterator iterator = new QueueIterator(queue);
+        iterator.MoveNext();
 
         // get a random index from the zone of the queue ensuring that the randoms are more spread out
         randoms[0] = 0;
@@ -25,8 +26,11 @@ public class SpecialQueue : Deque
         int counter = 0;
         for (int i = 1; i < randoms.Length; i++)
         {
-            iterator.Step(randoms[i] - randoms[i - 1]);
-            result[counter] = iterator.Current;
+            for (int j = randoms[i-1]; j < randoms[i] - 1; j++)
+            {
+                this.PopQueue();
+            }
+            result[counter] = this.PopQueue();
             counter++;
         }
 
@@ -49,6 +53,7 @@ public class SpecialQueue : Deque
 
     public void PushQueue(NeuralState value)
     {
+
         base.Push(value);
         Qlength++;
     }

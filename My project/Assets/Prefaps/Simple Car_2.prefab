@@ -194,7 +194,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &226830717416848836
 Transform:
   m_ObjectHideFlags: 0
@@ -735,14 +735,17 @@ MonoBehaviour:
   carControl: {fileID: 3871768556047484477}
   carRaycaster: {fileID: 3917961754724406673}
   _inputLayer: 5
-  _layers: 200000002000000010000000
+  _layers: 4000000020000000
   learningRate: 0.8
   discountFactor: 0.99
   networkSyncRate: 100
   replayMemorySize: 1000
   batchSize: 32
-  cooldown: 0.5
+  cooldown: 0.25
+  SPEEEDUWAGOOON: 10
   sessionPlaying: 1
+  _actionCount: 0
+  _wheelReward: 0
 --- !u!114 &3917961754724406673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -755,7 +758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d88513106f971224a94c9f1c2f983ae6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayCount: 20
+  rayCount: 16
   rayLength: 20
   rayAngleSpread: 230
   carControl: {fileID: 3871768556047484477}

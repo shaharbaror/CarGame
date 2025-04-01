@@ -293,6 +293,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (11)
@@ -416,6 +420,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (10)
@@ -478,6 +486,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6779151862332095884, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
   m_PrefabInstance: {fileID: 193377575}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &198615462 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6191372341502193125, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
+  m_PrefabInstance: {fileID: 751369042}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &228322718
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,13 +552,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (15)
       objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Layer
-      value: 7
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_TagString
+      value: Good Wall
       objectReference: {fileID: 0}
     - target: {fileID: 6779151862332095884, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_LocalScale.x
@@ -619,7 +640,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &257752263
 AudioListener:
   m_ObjectHideFlags: 0
@@ -687,13 +708,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 257752262}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.03880238, y: 0.75628316, z: -0.045040507, w: 0.6515379}
+  m_LocalPosition: {x: 97.08, y: 7.72, z: 15.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 6.816, y: 98.51, z: 0}
 --- !u!114 &257752266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -826,6 +847,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (12)
@@ -896,6 +921,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (9)
@@ -1189,6 +1218,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (6)
@@ -1255,6 +1288,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (14)
@@ -1372,7 +1409,7 @@ Transform:
   m_GameObject: {fileID: 617742116}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -35.55, y: -4.1, z: 40.85}
+  m_LocalPosition: {x: -19.81, y: -4.1, z: 39.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1568,35 +1605,35 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 2119483245}
     m_Modifications:
     - target: {fileID: 6191372341502193125, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 109.49
+      value: 1.2084503
       objectReference: {fileID: 0}
     - target: {fileID: 6191372341502193125, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -5.1102595
       objectReference: {fileID: 0}
     - target: {fileID: 6191372341502193125, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.09
+      value: 3.778613
       objectReference: {fileID: 0}
     - target: {fileID: 6191372341502193125, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.70749974
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 6191372341502193125, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6191372341502193125, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7067137
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 6191372341502193125, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6191372341502193125, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1604,7 +1641,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6191372341502193125, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 89.936
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 6191372341502193125, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -1613,6 +1650,10 @@ PrefabInstance:
     - target: {fileID: 6820698318962358111, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
       propertyPath: m_Name
       value: Simple Car_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820698318962358111, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1680,6 +1721,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (4)
@@ -1750,6 +1795,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall
@@ -1816,6 +1865,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (13)
@@ -2224,6 +2277,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (8)
@@ -2347,6 +2404,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (5)
@@ -2675,6 +2736,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (1)
@@ -2741,6 +2806,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (3)
@@ -2951,6 +3020,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (7)
@@ -3070,6 +3143,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (2)
@@ -3141,13 +3218,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1766046959}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Good Walls
-  m_TagString: Untagged
+  m_TagString: Good Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1766046959
 Transform:
   m_ObjectHideFlags: 0
@@ -3190,6 +3267,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Name
       value: BadWall (1)
@@ -3674,6 +3755,61 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 266933587}
   m_SourcePrefab: {fileID: 100100000, guid: 493f01361ccfce74499b13e5a2e13c6a, type: 3}
+--- !u!1 &2119483243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2119483245}
+  - component: {fileID: 2119483244}
+  m_Layer: 0
+  m_Name: CarSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2119483244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119483243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b94f9df92ecc6164aa86fb9b31f7794b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carPrefab: {fileID: 6820698318962358111, guid: d9695919de7b2374e9f3d29d89c84829, type: 3}
+  carCount: 1
+  _inputLayer: 5
+  _layers: 4000000020000000
+  learningRate: 0.08
+  discountFactor: 0.9
+  networkSyncRate: 100
+  replayMemorySize: 1000
+  batchSize: 32
+  EpisodeCount: 0
+--- !u!4 &2119483245
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119483243}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 108.28155, y: 5.1102595, z: 12.311387}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 198615462}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &9181443391321664912
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3682,6 +3818,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2038406752}
     m_Modifications:
+    - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2679359139799993662, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_ProvidesContacts
       value: 0
@@ -3696,7 +3836,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_TagString
-      value: Good Wall
+      value: BadWall
       objectReference: {fileID: 0}
     - target: {fileID: 6779151862332095884, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3766,6 +3906,6 @@ SceneRoots:
   - {fileID: 970363580}
   - {fileID: 2082056941}
   - {fileID: 1080511978}
-  - {fileID: 751369042}
   - {fileID: 2038406752}
   - {fileID: 1766046959}
+  - {fileID: 2119483245}
