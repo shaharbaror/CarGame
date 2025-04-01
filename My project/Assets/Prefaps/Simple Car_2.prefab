@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3138217587114037270}
   - component: {fileID: 1890069067935465458}
   - component: {fileID: 7021732776250382489}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Simple Car_2 BR Tire (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 473527375736965185}
   - component: {fileID: 2935806533264299527}
   - component: {fileID: 6633519664785198781}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Simple Car_2 FL Tire (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,13 +188,13 @@ GameObject:
   - component: {fileID: 3147088656838697422}
   - component: {fileID: 3921096643681036939}
   - component: {fileID: 3374522067306702773}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &226830717416848836
 Transform:
   m_ObjectHideFlags: 0
@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 2462487641926016023}
   - component: {fileID: 5453433496000695267}
   - component: {fileID: 4118419041452100059}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Simple Car_2 BL Tire (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -412,7 +412,7 @@ GameObject:
   - component: {fileID: 126981038713145058}
   - component: {fileID: 6121826167125374704}
   - component: {fileID: 5507246357238134299}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Simple Car_2 FR Tire (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,6 +509,14 @@ PrefabInstance:
       propertyPath: m_ProvidesContacts
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3448671889980540821, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3890226830745112500, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.5
@@ -523,31 +531,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 109.49
+      value: 1.2084503
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -5.1102595
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.09
+      value: 3.778613
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.70749974
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7067137
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -555,7 +563,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 89.936
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -566,8 +574,24 @@ PrefabInstance:
       value: Simple Car_2
       objectReference: {fileID: 0}
     - target: {fileID: 5252282590161985829, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5252282590161985829, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5252282590161985829, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
+      propertyPath: m_TagString
+      value: Car
+      objectReference: {fileID: 0}
+    - target: {fileID: 5775891317226932824, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8898808779681291430, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -2715204995951423239, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
@@ -695,6 +719,7 @@ MonoBehaviour:
   carSpeed: 0
   curSteer: 0
   wheels: []
+  startingPos: {x: 0, y: 0, z: 0}
 --- !u!114 &300131845903885032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -717,6 +742,7 @@ MonoBehaviour:
   replayMemorySize: 1000
   batchSize: 32
   cooldown: 0.5
+  sessionPlaying: 1
 --- !u!114 &3917961754724406673
 MonoBehaviour:
   m_ObjectHideFlags: 0

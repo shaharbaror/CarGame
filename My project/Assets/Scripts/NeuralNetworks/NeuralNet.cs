@@ -13,11 +13,11 @@ public class NeuralNet
         // creatre the rest of the layers 
         for (int i = 0; i < layerSizes.Length - 1; i++)
         {
-            layers.Add(new Layer(i == 0? inputLayerSize:layerSizes[i - 1], layerSizes[i], "sigmoid"));
+            layers.Add(new Layer(i == 0? inputLayerSize:layerSizes[i - 1], layerSizes[i], "leakyrelu"));
         }
 
         // creater an output layer
-        layers.Add(new Layer(layerSizes[layerSizes.Length - 2], outputLayer, "sigmoid"));
+        layers.Add(new Layer(layerSizes[layerSizes.Length - 2], outputLayer, "none"));
     }
 
     // go through every layer and feed forward the inputs untill

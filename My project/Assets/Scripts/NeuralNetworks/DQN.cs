@@ -157,7 +157,7 @@ public class DQN
     */
 
     // train the network with a batch of experiances
-    private void TeachTheNetwork(NeuralState[] batch)
+    public void TeachTheNetwork(NeuralState[] batch)
     {
         // get the target values for the batch
         float[] targetValues = new float[batch.Length];

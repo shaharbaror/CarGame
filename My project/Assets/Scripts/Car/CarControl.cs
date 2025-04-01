@@ -15,6 +15,9 @@ public class CarControl : MonoBehaviour
     public WheelControl[] wheels;
     Rigidbody rigidBody;
 
+    public Vector3 startingPos;
+    private Quaternion startingRot;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +28,9 @@ public class CarControl : MonoBehaviour
 
         // Find all child GameObjects that have the WheelControl script attached
         wheels = GetComponentsInChildren<WheelControl>();
+
+        startingPos = transform.position;
+        startingRot = transform.rotation;
     }
 
     // Update is called once per frame
@@ -88,7 +94,6 @@ public class CarControl : MonoBehaviour
     // a function to operate the car gas
     public void Accelerate(bool isHard)
     {
-        Debug.Log("Accelerating");
         float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
         this.carSpeed = forwardSpeed;
 
@@ -125,7 +130,6 @@ public class CarControl : MonoBehaviour
     {
         float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
         this.carSpeed = forwardSpeed;
-        Debug.Log("Braking");
 
 
         // Calculate how close the car is to top speed
@@ -167,6 +171,30 @@ public class CarControl : MonoBehaviour
                 wheel.WheelCollider.steerAngle = amount * currentSteerRange;
             }
         }
+    }
+
+    public void ResetCar()
+    {
+        // Reset the car's position rotation and acceleration
+        
+        foreach (var wheel in wheels)
+        {
+            if (wheel.motorized)
+            {
+                wheel.WheelCollider.motorTorque = 0;
+            }
+            if (wheel.steerable)
+            {
+                wheel.WheelCollider.steerAngle = 0;
+            }
+            wheel.WheelCollider.brakeTorque = 0;
+        }
+        rigidBody.linearVelocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
+        this.transform.position = startingPos;
+        this.transform.rotation = startingRot;
+
+        
     }
 
 }

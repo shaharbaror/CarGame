@@ -32,7 +32,7 @@ public class Layer
         }
 
 
-        Weights = new float[neuronCount, inputSize];
+            Weights = new float[neuronCount, inputSize];
         Biases = new float[neuronCount];
         LastValues = new float[neuronCount];
 
