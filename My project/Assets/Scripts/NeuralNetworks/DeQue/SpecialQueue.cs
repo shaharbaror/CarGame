@@ -2,10 +2,9 @@ using UnityEngine;
 
 public class SpecialQueue : Deque
 {
-    private int Qlength;
+
     public SpecialQueue(int maxSize) : base(maxSize)
     {
-        Qlength = 0;
     }
 
     // get a number of random elements to be taken from the queue and then clear the queue
@@ -26,16 +25,11 @@ public class SpecialQueue : Deque
         int counter = 0;
         for (int i = 1; i < randoms.Length; i++)
         {
-            for (int j = randoms[i-1]; j < randoms[i] - 1; j++)
-            {
-                this.PopQueue();
-            }
-            result[counter] = this.PopQueue();
+            iterator.Step(randoms[i] - randoms[i - 1]);
+            result[counter] = iterator.Current;
             counter++;
         }
-
-        this.Clear();
-
+        
         return result;
     }
 
@@ -53,14 +47,12 @@ public class SpecialQueue : Deque
 
     public void PushQueue(NeuralState value)
     {
-
         base.Push(value);
-        Qlength++;
+        
     }
 
     public NeuralState PopQueue()
     {
-        Qlength--;
         return base.Pop();
     }
 

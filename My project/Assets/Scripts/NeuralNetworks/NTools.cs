@@ -1,32 +1,59 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class NTools : MonoBehaviour
+public class NTools
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public double[,] MultiplyMatrices(double[,] matrix1, double[,] matrix2)
+    public LayerData SerializeLayer(Layer l)
     {
-        double[,] result = new double[matrix1.GetLength(0), matrix2.GetLength(1)];
-        for (int i = 0; i < matrix1.GetLength(0); i++)
-        {
-            for (int j = 0; j < matrix2.GetLength(1); j++)
-            {
-                for (int k = 0; k < matrix1.GetLength(1); k++)
-                {
-                    result[i, j] += matrix1[i, k] * matrix2[k, j];
-                }
-            }
-        }
-        return result;
+        LayerData data = new LayerData();
+        data.InputSize = l.InputSize;
+        data.NeuronCount = l.NeuronCount;
+        data.Biases = l.Biases;
+        data.Weights = l.Weights;
+        return data;
     }
 
-    public double MultiplyMatrices(double[] matrix1, double[] matrix2)
-    {
-        double result = 0;
-        for (int i = 0; i < matrix1.Length; i++)
+    public NetworkData SerializeNetwork(NeuralNet net) {
+        NetworkData n = new NetworkData();
+        n.LayerCount = net.GetLayerCount();
+        n.Layers = new LayerData[n.LayerCount];
+        for (int i =0; i< n.LayerCount; i++)
         {
-            result += matrix1[i] * matrix2[i];
+            n.Layers[i] = this.SerializeLayer(net.GetLayerAtIndex(i));
         }
-        return result;
+        return n;
     }
+
+    public void DeserializeLayer(Layer l, LayerData data)
+    {
+        l.SetLayer(data.Weights, data.Biases);
+        l.InputSize = data.InputSize;
+        l.NeuronCount = data.NeuronCount;
+    }
+
+    public void DeserializeNetwork(NeuralNet net, NetworkData data)
+    {
+        for (int i = 0; i < data.LayerCount; i++)
+        {
+            this.DeserializeLayer(net.GetLayerAtIndex(i), data.Layers[i]);
+        }
+    }
+}
+
+[Serializable]
+public class NetworkData
+{
+    public int LayerCount;
+    public LayerData[] Layers;
+}
+
+[Serializable]
+public class LayerData
+{
+    public int InputSize;
+    public int NeuronCount;
+    public float[] Biases;
+    public float[,] Weights;
 }

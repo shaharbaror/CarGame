@@ -740,7 +740,7 @@ MonoBehaviour:
   discountFactor: 0.99
   networkSyncRate: 100
   replayMemorySize: 1000
-  batchSize: 32
+  batchSize: 64
   cooldown: 0.25
   SPEEEDUWAGOOON: 10
   sessionPlaying: 1

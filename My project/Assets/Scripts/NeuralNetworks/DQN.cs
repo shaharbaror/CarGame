@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class DQN
 {
+    [SerializeField]
     public NeuralNet Policy, Target;
     private SpecialQueue Memory;
 
-    private float learningRate, discountFactor;
+    private float learningRate, discountFactor, epsilon;
     private int networkSyncRate, replayMemorySize, batchSize;
+    
 
     // initialization
     public DQN(int inputLayer, int[] hiddenLayer, int outputLayer, Dictionary<string, (int, float)> parameters)
@@ -35,13 +37,15 @@ public class DQN
     public void SetMainValues(Dictionary<string, (int, float)> p)
     {
         this.learningRate = p["learningRate"].Item2;
+        this.epsilon = p["epsilon"].Item2;
         this.discountFactor = p["discountFactor"].Item2;
         this.networkSyncRate = p["netwrokSyncRate"].Item1;
         this.replayMemorySize = p["replayMemorySize"].Item1;
         this.batchSize = p["batchSize"].Item1;
+        
     }
 
-    private void CopyNetworks(NeuralNet p, NeuralNet t)
+    public void CopyNetworks(NeuralNet p, NeuralNet t)
     {         // update the target network with the policy network
         for (int i = 0; i < p.GetLayerCount(); i++)
         {
@@ -194,14 +198,18 @@ public class DQN
                 float[] options = this.Target.ShowResults(batch.newState);
                 targetValue = batch.reward + this.discountFactor * options[PreformEpsilonGreedy(options)];
             }
+            if (batch.state== null)
+            {
+                continue;
+            }
             float[] currentQValues = this.Policy.ShowResults(batch.state);
 
             float[] targetQValues = (float[])currentQValues.Clone();
             targetQValues[batch.action] = targetValue;
-            for (int i = 0; i < targetQValues.Length; i++)
-            {
-                Debug.Log(targetQValues[i] - currentQValues[i]);
-            }
+            //for (int i = 0; i < targetQValues.Length; i++)
+            //{
+            //    Debug.Log(targetQValues[i] - currentQValues[i]);
+            //}
 
             this.Policy.Backpropagate(batch.state, targetQValues, this.learningRate);
         }
@@ -210,7 +218,7 @@ public class DQN
 
 
     private int PreformEpsilonGreedy(float[] options) { 
-        if (Random.Range(0f, 1f) > 0.5f)
+        if (Random.Range(0f, 1f) > epsilon)
         {
             // preform the best action
             int maximum = 0;
@@ -234,7 +242,13 @@ public class DQN
         this.networkSyncRate = dqn.networkSyncRate;
         this.replayMemorySize = dqn.replayMemorySize;
         this.batchSize = dqn.batchSize;
+        this.epsilon = dqn.epsilon;
 
+    }
+
+    public void ChangeEpsilon(float epsilon)
+    {
+        this.epsilon = epsilon;
     }
 
 

@@ -4,6 +4,7 @@ using Unity.MLAgents.Sensors;
 using System.Linq;
 using Unity.MLAgents.Actuators;
 using UnityEngine.UIElements;
+using System.Collections.Generic;
 
 public class CarAgent : MonoBehaviour
 {
@@ -20,9 +21,11 @@ public class CarAgent : MonoBehaviour
     public int[] _layers = { 10, 10 }; // Hidden layers and output layer
     public float learningRate = 0.08f;
     public float discountFactor = 0.9f;
+    public float epsilon = 0.5f;
     public int networkSyncRate = 100;
     public int replayMemorySize = 1000;
     public int batchSize = 128;
+    
 
     public float cooldown = 100f;
     private float lastTime = 0;
@@ -34,7 +37,7 @@ public class CarAgent : MonoBehaviour
 
     public bool sessionPlaying = true;
     public int _actionCount = 0;
-    private int _maxActions = 50;
+    private int _maxActions = 300;
 
 
     private float _motorReward = 0f;
@@ -73,7 +76,8 @@ public class CarAgent : MonoBehaviour
             {"discountFactor", (0, discountFactor)},
             {"netwrokSyncRate", (networkSyncRate, 0)},
             {"replayMemorySize", (replayMemorySize, 0)},
-            {"batchSize", (batchSize, 0)}
+            {"batchSize", (batchSize, 0)},
+            {"epsilon",(0, epsilon) },
         });
 
         // The DQN network for the Motors
@@ -82,7 +86,8 @@ public class CarAgent : MonoBehaviour
             {"discountFactor", (0, discountFactor)},
             {"netwrokSyncRate", (networkSyncRate, 0)},
             {"replayMemorySize", (replayMemorySize, 0)},
-            {"batchSize", (batchSize, 0)}
+            {"batchSize", (batchSize, 0)},
+            {"epsilon",(0, epsilon) },
         });
 
         WheelMemory = new SpecialQueue(replayMemorySize);
@@ -125,32 +130,32 @@ public class CarAgent : MonoBehaviour
 
     public void PreformMotorAction(int action)
     {
-        //switch (action)
-        //{
-        //    case 0:
-                
-        //        // Hard Acceleration
-        //        carControl.Accelerate(true);
-        //        break;
-        //    case 1:
-                
-        //        // Soft Acceleration
-        //        carControl.Accelerate(false);
-        //        break;
-        //    case 2:
-        //        // Soft Brake
-        //        carControl.Brake(false);
-        //        break;
-        //    case 3:
-        //        // Hard brake
-        //        carControl.Brake(true);
-        //        break;
-        //    default:
-                
-        //        // Do nothing, keep the same speed
-        //        break;
-        //}
-        carControl.Accelerate(false);
+        switch (action)
+        {
+            case 0:
+
+                // Hard Acceleration
+                carControl.Accelerate(true);
+                break;
+            case 1:
+
+                // Soft Acceleration
+                carControl.Accelerate(false);
+                break;
+            case 2:
+                // Soft Brake
+                carControl.Brake(false);
+                break;
+            case 3:
+                // Hard brake
+                carControl.Brake(true);
+                break;
+            default:
+
+                // Do nothing, keep the same speed
+                break;
+        }
+        //carControl.Accelerate(false);
     }
 
     public void Update()
@@ -206,12 +211,12 @@ public class CarAgent : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Time.timeScale += 1;
+            Time.timeScale = 100;
 
         }
         else if (Input.GetKeyDown(KeyCode.T))
         {
-            Time.timeScale -= 1;
+            Time.timeScale = 1;
         }
         //else
         //{
@@ -244,10 +249,10 @@ public class CarAgent : MonoBehaviour
     private void CalculateMotorReward()
     {
          if (carControl.carSpeed >0)
-        _motorReward += carControl.carSpeed * 0.01f;
+            _motorReward += carControl.carSpeed * 0.3f;
         else
         {
-            _motorReward -= 0.1f;
+            _motorReward -= 0.2f;
         }
     }
 
@@ -265,10 +270,16 @@ public class CarAgent : MonoBehaviour
         Debug.DrawRay(transform.position, left * hLeft.distance, Color.red);
         if (carControl.carSpeed > 0)
         {
-            _wheelReward += Mathf.Min(hRight.distance, hLeft.distance) / Mathf.Max(hRight.distance, hLeft.distance) * 3; // adds between 0 to 1 depends on the distance from the center
-            
+            float incAmount = Mathf.Pow(Mathf.Min(hRight.distance, hLeft.distance) / Mathf.Max(hRight.distance, hLeft.distance), 2); // adds between 0 to 1 depends on the distance from the center
+            if (incAmount > 0.5)
+            {
+                _wheelReward += incAmount;
+            }
+            else
+            {
+                _wheelReward -= 0.3f;
+            }
         }
-
     }
 
     void OnCollisionEnter(Collision collision)
@@ -276,15 +287,20 @@ public class CarAgent : MonoBehaviour
         
         if (collision.gameObject.CompareTag("BadWall"))
         {
-            //_motorReward -= 10f;
+            _motorReward -= 5f;
             _wheelReward -= 10f;
             sessionPlaying = false;
         }
         if (collision.gameObject.CompareTag("Good Wall"))
         {
-            //_motorReward += 10f;
-            _wheelReward += 10f;
-            sessionPlaying = false;
+            _motorReward += 10f;
+            //_wheelReward += 10f;
+           
+        }
+        if (collision.gameObject.CompareTag("Respawn"))
+        {
+            sessionPlaying = true;
+            Debug.Log("FINISHED!");
         }
 
 

@@ -562,11 +562,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6372218266416884854, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_TagString
-      value: Good Wall
+      value: Respawn
       objectReference: {fileID: 0}
     - target: {fileID: 6779151862332095884, guid: 54e70171a67e54141b9d56e4f74437f1, type: 3}
       propertyPath: m_LocalScale.x
@@ -3224,7 +3224,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1766046959
 Transform:
   m_ObjectHideFlags: 0
@@ -3788,12 +3788,16 @@ MonoBehaviour:
   carCount: 1
   _inputLayer: 5
   _layers: 4000000020000000
-  learningRate: 0.08
+  learningRate: 0.0005
   discountFactor: 0.9
-  networkSyncRate: 100
-  replayMemorySize: 1000
-  batchSize: 32
+  epsilon: 0.5
+  networkSyncRate: 150
+  replayMemorySize: 10000
+  minAmount: 1000
+  batchSize: 64
   EpisodeCount: 0
+  HowManyTimesTaught: 0
+  HowManyTimesSwitched: 0
 --- !u!4 &2119483245
 Transform:
   m_ObjectHideFlags: 0

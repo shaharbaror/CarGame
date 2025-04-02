@@ -118,5 +118,11 @@ public class NeuralNet
     }
 
 
+    public Layer GetLayerAtIndex(int index)
+    {
+        return layers[index];
+    }
+
+
 
 }

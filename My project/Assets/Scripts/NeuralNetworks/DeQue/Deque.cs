@@ -6,11 +6,13 @@ public class Deque : IEnumerable<NeuralState>
 {
     protected int maxSize;
     protected Queue<NeuralState> queue;
+    protected int Qlength;
 
     public Deque(int maxSize)
     {
         this.maxSize = maxSize;
         queue = new Queue<NeuralState>(maxSize);
+        this.Qlength = 0;
     }
 
     
@@ -19,12 +21,15 @@ public class Deque : IEnumerable<NeuralState>
         if (queue.Count == maxSize)
         {
             queue.Dequeue();
+            Qlength--;
         }
         queue.Enqueue(value);
+        Qlength++;
     }
 
     public NeuralState Pop()
     {
+        Qlength--;
         return queue.Dequeue();
     }
 
