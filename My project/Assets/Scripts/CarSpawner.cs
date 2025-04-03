@@ -12,6 +12,7 @@ public class CarSpawner : MonoBehaviour
     private GameObject[] cars;
     private CarAgent[] carAgents;
     public int carCount = 1;
+    public bool toggle = false; // for testing purposes
 
     //private SpecialQueue WheelMemory, MotorMemory;
     private DQN WheelDqn, MotorDqn;
@@ -37,6 +38,10 @@ public class CarSpawner : MonoBehaviour
 
     void Start()
     {
+        if (toggle)
+        {
+
+        
         if (carPrefab == null)
         {
             Debug.Log("Car prefab is null");
@@ -71,83 +76,92 @@ public class CarSpawner : MonoBehaviour
         FirstWeights = new List<float[,]>();
         for (int i = 0; i < _layers.Length; i++)
         {
-            float[,] theseWs = (float[,])WheelDqn.Policy.GetLayerIndexWeights(i).Clone();
+            float[,] theseWs = (float[,])WheelDqn.Target.GetLayerIndexWeights(i).Clone();
             FirstWeights.Add(theseWs);
         }
 
         GetNets();
         SpawnAllCars();
+    } else
+        {
+
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        bool allCarsStopped = true;
-        for ( int i = 0; i < carCount && allCarsStopped; i++)
+        if (toggle)
         {
-            if (carAgents[i].sessionPlaying)
+            bool allCarsStopped = true;
+            for (int i = 0; i < carCount && allCarsStopped; i++)
             {
-                allCarsStopped = false;
-            }
-        }
-        if (allCarsStopped && tim < Time.time)
-        {
-            // means end of episode
-            // Teach the WheelDQN
-            // Tech the MotorDQN
-            TeachDQN();
-            for (int i = 0; i < carCount; i++)
-            {
-                EpisodeCount++;
-                carAgents[i].ResetCar(carAgents[i].MotorMemory.Length() == 0);
-                carAgents[i].GetData(WheelDqn, MotorDqn);
-            }
-            if (EpisodeCount % networkSyncRate == 0)
-            {
-                WheelDqn.UpdateTarget();
-                MotorDqn.UpdateTarget();
-                HowManyTimesSwitched++;
-            }
-            tim = Time.time + 0.5f;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            bool isSame = true;
-            for (int i = 0; i < FirstWeights.Count; i++)
-            {
-                float[,] curW = WheelDqn.Policy.GetLayerIndexWeights(i);
-                for (int j = 0; j < curW.GetLength(0); j++)
+                if (carAgents[i].sessionPlaying)
                 {
-                    for (int k = 0; k < curW.GetLength(1); k++)
+                    allCarsStopped = false;
+                }
+            }
+            if (allCarsStopped && tim < Time.time)
+            {
+                // means end of episode
+                // Teach the WheelDQN
+                // Tech the MotorDQN
+                TeachDQN();
+                for (int i = 0; i < carCount; i++)
+                {
+                    EpisodeCount++;
+                    carAgents[i].ResetCar(carAgents[i].MotorMemory.Length() == 0);
+                    carAgents[i].GetData(WheelDqn, MotorDqn);
+                }
+                if (EpisodeCount % networkSyncRate == 0)
+                {
+                    WheelDqn.UpdateTarget();
+                    MotorDqn.UpdateTarget();
+                    HowManyTimesSwitched++;
+                }
+                tim = Time.time + 0.5f;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                bool isSame = true;
+                for (int i = 0; i < FirstWeights.Count; i++)
+                {
+                    float[,] curW = WheelDqn.Target.GetLayerIndexWeights(i);
+                    for (int j = 0; j < curW.GetLength(0); j++)
                     {
-                        if (curW[j, k] != FirstWeights[i][j, k])
+                        for (int k = 0; k < curW.GetLength(1); k++)
                         {
-                            isSame = false;
-                            break;
+                            if (curW[j, k] != FirstWeights[i][j, k])
+                            {
+                                isSame = false;
+                                break;
+                            }
                         }
                     }
                 }
+
+                Debug.Log(isSame);
+            }
+            else if (Input.GetKeyDown(KeyCode.N))
+            {
+                this.SaveNets();
             }
 
-            Debug.Log(isSame);
+            if (EpisodeCount == 3000)
+            {
+                epsilon = 0.3f;
+                WheelDqn.ChangeEpsilon(epsilon);
+                MotorDqn.ChangeEpsilon(epsilon);
+            }
+            if (EpisodeCount == 10000)
+            {
+                epsilon = 0.1f;
+                WheelDqn.ChangeEpsilon(epsilon);
+                MotorDqn.ChangeEpsilon(epsilon);
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.N)) { 
-            this.SaveNets();
-        }
-
-        if (EpisodeCount == 3000)
-        {
-            epsilon = 0.3f;
-            WheelDqn.ChangeEpsilon(epsilon);
-            MotorDqn.ChangeEpsilon(epsilon);
-        }
-        if (EpisodeCount == 10000)
-        {
-            epsilon = 0.1f;
-            WheelDqn.ChangeEpsilon(epsilon);
-            MotorDqn.ChangeEpsilon(epsilon);
-        }
+        else { }
     }
 
     
@@ -174,7 +188,7 @@ public class CarSpawner : MonoBehaviour
     {
         for (int i = 0; i < carCount; i++)
         {
-            cars[i] = Instantiate(carPrefab, new Vector3(115.3f, 0.2f, 14.46f), Quaternion.Euler(0,90,0));
+            cars[i] = Instantiate(carPrefab, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(0,90,0));
             carAgents[i] = cars[i].GetComponent<CarAgent>();
             carAgents[i].GetData(WheelDqn, MotorDqn);
         }
@@ -184,16 +198,16 @@ public class CarSpawner : MonoBehaviour
     private void SaveNets()
     {
         FileModifier fileModifier = new FileModifier();
-        fileModifier.WriteBinFile(WheelDqn.Policy, "WheelNet.bin");
-        fileModifier.WriteBinFile(MotorDqn.Policy, "MotorNet.bin");
+        fileModifier.WriteBinFile(WheelDqn.Policy, "WheelNet3.bin");
+        fileModifier.WriteBinFile(MotorDqn.Policy, "MotorNet3.bin");
     }
 
     private void GetNets()
     {
         FileModifier fileModifier = new FileModifier();
-        WheelDqn.Policy = fileModifier.ReadNet(WheelDqn.Policy, "WheelNet.bin");
+        fileModifier.ReadNet(WheelDqn.Policy, "WheelNet2.bin");
         WheelDqn.UpdateTarget();
-        MotorDqn.Policy = fileModifier.ReadNet(MotorDqn.Policy, "MotorNet.bin");
+        fileModifier.ReadNet(MotorDqn.Policy, "MotorNet2.bin");
         MotorDqn.UpdateTarget();
     }
 }

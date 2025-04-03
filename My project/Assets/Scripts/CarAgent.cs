@@ -5,6 +5,9 @@ using System.Linq;
 using Unity.MLAgents.Actuators;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
+using System.Net;
+using Assets.Scripts.FileHandler;
+using Unity.VisualScripting;
 
 public class CarAgent : MonoBehaviour
 {
@@ -48,30 +51,32 @@ public class CarAgent : MonoBehaviour
     private float[] _currentState;
 
     private bool once = true;
+    public bool toggle = true;
 
 
 
     public void Awake()
     {
-
-        // Create the Ray Perception Sensor
-        carControl = GetComponent<CarControl>();
-        if (carControl == null)
+        if (toggle)
         {
-            Debug.Log("No Connection with the Car Controller");
-        }
+            // Create the Ray Perception Sensor
+            carControl = GetComponent<CarControl>();
+            if (carControl == null)
+            {
+                Debug.Log("No Connection with the Car Controller");
+            }
 
-        carRaycaster = GetComponent<CarRaycaster>();
-        if (carRaycaster == null)
-        {
-            Debug.Log("No Connection with the Car Raycaster");
-        }
+            carRaycaster = GetComponent<CarRaycaster>();
+            if (carRaycaster == null)
+            {
+                Debug.Log("No Connection with the Car Raycaster");
+            }
 
-        _inputLayer = carRaycaster.GetInputSize();
+            _inputLayer = carRaycaster.GetInputSize();
 
-        //// Create the DQN
-        //// The DQN network for the Wheels
-        WheelDqn = new DQN(_inputLayer, _layers, 5, new System.Collections.Generic.Dictionary<string, (int, float)>{
+            //// Create the DQN
+            //// The DQN network for the Wheels
+            WheelDqn = new DQN(_inputLayer, _layers, 5, new System.Collections.Generic.Dictionary<string, (int, float)>{
             {"learningRate", (0, learningRate)},
             {"discountFactor", (0, discountFactor)},
             {"netwrokSyncRate", (networkSyncRate, 0)},
@@ -80,8 +85,8 @@ public class CarAgent : MonoBehaviour
             {"epsilon",(0, epsilon) },
         });
 
-        // The DQN network for the Motors
-        MotorDqn = new DQN(_inputLayer, _layers, 5, new System.Collections.Generic.Dictionary<string, (int, float)>{
+            // The DQN network for the Motors
+            MotorDqn = new DQN(_inputLayer, _layers, 5, new System.Collections.Generic.Dictionary<string, (int, float)>{
             {"learningRate", (0, learningRate)},
             {"discountFactor", (0, discountFactor)},
             {"netwrokSyncRate", (networkSyncRate, 0)},
@@ -90,10 +95,11 @@ public class CarAgent : MonoBehaviour
             {"epsilon",(0, epsilon) },
         });
 
-        WheelMemory = new SpecialQueue(replayMemorySize);
-        MotorMemory = new SpecialQueue(replayMemorySize);
 
-        
+            WheelMemory = new SpecialQueue(replayMemorySize);
+            MotorMemory = new SpecialQueue(replayMemorySize);
+
+        }
         
         }
 
@@ -160,63 +166,68 @@ public class CarAgent : MonoBehaviour
 
     public void Update()
     {
-        if (sessionPlaying == true)
+        if (toggle)
         {
-            if (Time.time > lastTime)
+            if (sessionPlaying == true)
             {
-                lastTime = Time.time + cooldown;
+                if (Time.time > lastTime)
+                {
+                    lastTime = Time.time + cooldown;
 
-                CalculateMotorReward();
+                    CalculateMotorReward();
+                    CalculateWheelReward();
+                    if (_motorReward > 0)
+                    {
+                        _motorRewardCount++;
+                    }
+                    if (_wheelReward > 0)
+                    {
+                        _wheelRewardCount++;
+                    }
+                    // Get the state from the ray sensor
+                    float[] state = carRaycaster.GetNetworkInput();
+                    _currentState = state;
+
+                    MotorMemory.PushQueue(new NeuralState(_lastState, motorAction, _motorReward, _currentState, false));
+                    WheelMemory.PushQueue(new NeuralState(_lastState, wheelAction, _wheelReward, _currentState, false));
+
+                    // Get the action form the DQN
+                    wheelAction = WheelDqn.GetAction(state);
+                    motorAction = MotorDqn.GetAction(state);
+                    // Apply the action to the car
+                    PreformWheelAction(wheelAction);
+                    PreformMotorAction(motorAction);
+
+                    _actionCount++;
+                }
+                if (_actionCount >= _maxActions)
+                {
+                    sessionPlaying = false;
+                }
+                _motorReward = 0f;
+                _wheelReward = 0f;
+                _lastState = _currentState;
+
+            }
+            else if (once)
+            {
                 CalculateWheelReward();
-                if (_motorReward > 0)
-                {
-                    _motorRewardCount++;
-                }
-                if (_wheelReward > 0)
-                {
-                    _wheelRewardCount++;
-                }
-                // Get the state from the ray sensor
-                float[] state = carRaycaster.GetNetworkInput();
-                _currentState = state;
-                
-                MotorMemory.PushQueue(new NeuralState(_lastState, motorAction, _motorReward, _currentState, false));
-                WheelMemory.PushQueue(new NeuralState(_lastState, wheelAction, _wheelReward, _currentState, false));
-
-                // Get the action form the DQN
-                wheelAction = WheelDqn.GetAction(state);
-                motorAction = MotorDqn.GetAction(state);
-                // Apply the action to the car
-                PreformWheelAction(wheelAction);
-                PreformMotorAction(motorAction);
-                _actionCount++;
+                CalculateMotorReward();
+                _currentState = carRaycaster.GetNetworkInput();
+                MotorMemory.PushQueue(new NeuralState(_lastState, motorAction, _motorReward, _currentState, true));
+                WheelMemory.PushQueue(new NeuralState(_lastState, wheelAction, _wheelReward, _currentState, true));
+                once = false;
             }
-            if (_actionCount >= _maxActions)
+
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                sessionPlaying = false;
+                Time.timeScale = 100;
+
             }
-            _motorReward = 0f;
-            _wheelReward = 0f;
-            _lastState = _currentState;
-
-        } else if (once)
-        {
-            CalculateWheelReward();
-            CalculateMotorReward();
-            _currentState = carRaycaster.GetNetworkInput();
-            MotorMemory.PushQueue(new NeuralState(_lastState, motorAction, _motorReward, _currentState, true));
-            WheelMemory.PushQueue(new NeuralState(_lastState, wheelAction, _wheelReward, _currentState, true));
-            once = false;
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Time.timeScale = 100;
-
-        }
-        else if (Input.GetKeyDown(KeyCode.T))
-        {
-            Time.timeScale = 1;
+            else if (Input.GetKeyDown(KeyCode.T))
+            {
+                Time.timeScale = 1;
+            }
         }
         //else
         //{
@@ -259,26 +270,53 @@ public class CarAgent : MonoBehaviour
     private void CalculateWheelReward()
     {
         // Calculate the reward based on the cars distance from the center of the track
-        Quaternion rotation = transform.rotation;
-        Vector3 right = rotation * Vector3.right;
-        Vector3 left = rotation * Vector3.left;
-        RaycastHit hRight, hLeft;
-        float distance = 20f;
-        Physics.Raycast(transform.position, right, out hRight, distance);
-        Debug.DrawRay(transform.position, right * hRight.distance, Color.red);
-        Physics.Raycast(transform.position, left, out hLeft, distance);
-        Debug.DrawRay(transform.position, left * hLeft.distance, Color.red);
+        //Quaternion rotation = transform.rotation;
+        //Vector3 left = Quaternion.Euler(0, -90, 0) * transform.forward;
+        //Vector3 right = Quaternion.Euler(0, 90, 0) * transform.forward;
+        //RaycastHit hRight, hLeft;
+        //float distance = 20f;
+
+        //Vector3 rayPos = new Vector3(transform.position.x, carRaycaster.rayHight, transform.position.y);
+        //// NOT GOOD RAYCASTING
+        //Physics.Raycast(rayPos, right, out hRight, distance);
+        //Debug.DrawRay(rayPos, right * hRight.distance, Color.blue);
+        //Physics.Raycast(rayPos, left, out hLeft, distance);
+        //Debug.DrawRay(rayPos, left * hLeft.distance, Color.white);
+        float[] distances = carRaycaster.GetSides();
         if (carControl.carSpeed > 0)
         {
-            float incAmount = Mathf.Pow(Mathf.Min(hRight.distance, hLeft.distance) / Mathf.Max(hRight.distance, hLeft.distance), 2); // adds between 0 to 1 depends on the distance from the center
-            if (incAmount > 0.5)
+            float incAmount = Mathf.Pow(distances[1] / distances[0], 2); // adds between 0 to 1 depends on the distance from the center
+            if (incAmount < 0.5)
             {
                 _wheelReward += incAmount;
+            }
+            else if (incAmount < 0.1)
+            {
+                _wheelReward -= 0.3f;
             }
             else
             {
                 _wheelReward -= 0.3f;
             }
+
+            //float incAmount = Mathf.Pow(hRight.distance / 4f, 2);
+            //if (incAmount > 1.3)
+            //{
+            //    _wheelReward -= -0.3f;
+            //}
+            //else if (incAmount > 1)
+            //{
+            //    _wheelReward += 1.3f - incAmount;
+            //}
+            //else if (incAmount >= 0.3)
+            //{
+            //    _wheelReward += incAmount;
+            //}
+            //else
+            //{
+            //    _wheelReward -= 0.3f;
+            //}
+
         }
     }
 
@@ -303,10 +341,9 @@ public class CarAgent : MonoBehaviour
             Debug.Log("FINISHED!");
         }
 
-
-
-
     }
+
+    
 
     public void ResetCar(bool isMemory)
     {
@@ -358,5 +395,7 @@ public class CarAgent : MonoBehaviour
     //        throw new System.Exception("No Connection with the Car Controller");
     //    }
     //}
+
+    
 
 }

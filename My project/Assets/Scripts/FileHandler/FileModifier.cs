@@ -84,17 +84,30 @@ namespace Assets.Scripts.FileHandler
         }
 
 
-        public NeuralNet ReadNet(NeuralNet net, string fileName)
+        public void ReadNet(NeuralNet net, string fileName)
         {
             NeuralNet newNet = net;
             NTools tool = new NTools();
             try
             {
-                if (File.Exists(filePath)) {
+                if (File.Exists(filePath + fileName)) {
                     using (FileStream fileStream = new FileStream(filePath + fileName, FileMode.Open))
                     {
                         BinaryFormatter binaryFormatter = new BinaryFormatter();
-                        tool.DeserializeNetwork(newNet, (NetworkData)binaryFormatter.Deserialize(fileStream));
+                        NetworkData n = (NetworkData)binaryFormatter.Deserialize(fileStream);
+                        for (int i = 0; i < n.LayerCount; i++) {
+                            float[,] weightus = net.GetLayerIndexWeights(i);
+                            float[] biases = net.GetLayerIndexBiases(i);
+                            for (int j = 0; j < weightus.GetLength(0); j++)
+                            {
+                                for (int k = 0; k < weightus.GetLength(1); k++)
+                                {
+                                    Debug.Log($"<color=green>Current Layer: {weightus[j, k]}, Layer from File: {n.Layers[i].Weights[j, k]}</color> \n");
+                                }
+                                Debug.Log($"<color=red>Current Bias: {biases[j]}, File biases {n.Layers[i].Biases[j]}</color> \n");
+                            }
+                        }
+                        tool.DeserializeNetwork(net, n);
                     }
                 }
             }
@@ -103,8 +116,6 @@ namespace Assets.Scripts.FileHandler
                 Debug.Log("didnt work");
                 Debug.LogException(e);
             }
-
-            return newNet;
         }
     }
 }

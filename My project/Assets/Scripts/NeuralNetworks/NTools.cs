@@ -10,8 +10,8 @@ public class NTools
         LayerData data = new LayerData();
         data.InputSize = l.InputSize;
         data.NeuronCount = l.NeuronCount;
-        data.Biases = l.Biases;
-        data.Weights = l.Weights;
+        data.Biases = (float[])l.Biases.Clone();
+        data.Weights = (float[,])l.Weights.Clone();
         return data;
     }
 
