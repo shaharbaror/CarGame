@@ -26,7 +26,7 @@ public class CarAgent : MonoBehaviour
     public float discountFactor = 0.9f;
     public float epsilon = 0.5f;
     public int networkSyncRate = 100;
-    public int replayMemorySize = 1000;
+    public int replayMemorySize = 10000;
     public int batchSize = 128;
     
 
@@ -40,7 +40,7 @@ public class CarAgent : MonoBehaviour
 
     public bool sessionPlaying = true;
     public int _actionCount = 0;
-    private int _maxActions = 300;
+    private int _maxActions = 150;
 
 
     private float _motorReward = 0f;
@@ -120,11 +120,11 @@ public class CarAgent : MonoBehaviour
                 // Move forward
                 carControl.TurnWheel(0);
                 break;
-            case 4:
+            case 3:
                 // turn easy left
                 carControl.TurnWheel(0.5f);
                 break;
-            case 5:
+            case 4:
                 // turn hard left
                 carControl.TurnWheel(1f);
                 break;
@@ -219,15 +219,7 @@ public class CarAgent : MonoBehaviour
                 once = false;
             }
 
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                Time.timeScale = 100;
-
-            }
-            else if (Input.GetKeyDown(KeyCode.T))
-            {
-                Time.timeScale = 1;
-            }
+            
         }
         //else
         //{
@@ -259,11 +251,11 @@ public class CarAgent : MonoBehaviour
 
     private void CalculateMotorReward()
     {
-         if (carControl.carSpeed >0)
+         if (carControl.carSpeed >0.5)
             _motorReward += carControl.carSpeed * 0.3f;
         else
         {
-            _motorReward -= 0.2f;
+            _motorReward -= 0.4f;
         }
     }
 
@@ -325,7 +317,7 @@ public class CarAgent : MonoBehaviour
         
         if (collision.gameObject.CompareTag("BadWall"))
         {
-            _motorReward -= 5f;
+            _motorReward -= 1f;
             _wheelReward -= 10f;
             sessionPlaying = false;
         }
@@ -365,6 +357,20 @@ public class CarAgent : MonoBehaviour
         return (MotorMemory.ClearAtRandom(batchSize), WheelMemory.ClearAtRandom(batchSize));
     }
 
+    public void SetAgent(Dictionary<string, int> changes)
+    {
+        this.replayMemorySize = changes["replayMemorySize"];
+        this.MotorMemory.ChangeMaxSize(changes["replayMemorySize"]);
+        this.WheelMemory.ChangeMaxSize(changes["replayMemorySize"]);
+        this.batchSize = changes["batchSize"];
+        this._maxActions = changes["maxActions"];
+    }
+
+    public void ChangeMaxActions(int action) {
+    this._maxActions = action;
+    }
+
+
 
 
 
@@ -396,6 +402,6 @@ public class CarAgent : MonoBehaviour
     //    }
     //}
 
-    
+
 
 }

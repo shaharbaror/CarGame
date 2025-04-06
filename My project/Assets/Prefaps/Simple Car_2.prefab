@@ -268,7 +268,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7058455022684755146}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &3374522067306702773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,15 +531,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 166.17
+      value: -8.030304
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0000052452087
+      value: -5.839999
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 57.27
+      value: 2.5403862
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -742,7 +742,7 @@ MonoBehaviour:
   epsilon: 0.5
   networkSyncRate: 100
   replayMemorySize: 1000
-  batchSize: 64
+  batchSize: 32
   cooldown: 0.25
   SPEEEDUWAGOOON: 10
   sessionPlaying: 1
@@ -762,7 +762,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rayCount: 16
-  rayLength: 20
+  rayLength: 40
   rayAngleSpread: 230
   rayHight: 0.7
   isAuto: 0

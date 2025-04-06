@@ -8,7 +8,7 @@ namespace Assets.Scripts.FileHandler
 {
     public class FileModifier
     {
-        public string filePath = "Assets/Scripts/FileHandler/";
+        public string filePath = "Assets/Scripts/FileHandler/LongRays/";
 
         public void AddTextFile(string text)
         {
