@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections.Generic;
 public class NeuralNet
 {
-    private List<Layer> layers;
-    private float[] InputLayer, OutputLayer;
+    public List<Layer> layers;
+    public float[] InputLayer, OutputLayer;
     
-    public NeuralNet(int inputLayerSize,int[] layerSizes, int outputLayer)
+    public NeuralNet(int inputLayerSize,int[] layerSizes, int outputLayer, string[] activations)
     {
 
         layers = new List<Layer>();
@@ -13,11 +13,11 @@ public class NeuralNet
         // creatre the rest of the layers 
         for (int i = 0; i < layerSizes.Length - 1; i++)
         {
-            layers.Add(new Layer(i == 0? inputLayerSize:layerSizes[i - 1], layerSizes[i], "leakyrelu"));
+            layers.Add(new Layer(i == 0? inputLayerSize:layerSizes[i - 1], layerSizes[i], activations[i]));
         }
 
         // creater an output layer
-        layers.Add(new Layer(layerSizes[layerSizes.Length - 2], outputLayer, "none"));
+        layers.Add(new Layer(layerSizes[layerSizes.Length - 2], outputLayer, activations[activations.Length-1]));
     }
 
     // go through every layer and feed forward the inputs untill
@@ -97,6 +97,43 @@ public class NeuralNet
         }
     }
 
+    // Soft update the target network weights and biases using a factor tau
+    public void SoftUpdate(NeuralNet other, float tau)
+    {
+        if (other.layers.Count != this.layers.Count)
+        {
+            Debug.LogError("Networks have different number of layers.");
+            return;
+        }
+        // Update the target weights and biases using soft update
+        for (int i = 0; i < layers.Count; i++)
+        {
+            Layer thisLayer = layers[i];
+            Layer otherLayer = other.layers[i];
+            for (int j = 0; j < thisLayer.NeuronCount; j++)
+            {
+                // update the biases
+                thisLayer.Biases[j] = (1 - tau) * thisLayer.Biases[j] + tau * otherLayer.Biases[j];
+
+                // update the weights
+                for (int k = 0; k < thisLayer.InputSize; k++)
+                {
+                    thisLayer.Weights[j, k] = (1 - tau) * thisLayer.Weights[j, k] + tau * otherLayer.Weights[j, k];
+                }
+            }
+        }
+    }
+
+    public void CloneNetwork(NeuralNet other)
+    {
+        for (int i = 0; i < layers.Count; i++)
+        {
+            layers[i].SetLayer(other.layers[i].Weights, other.layers[i].Biases);
+        }
+    }
+
+
+    // -------------------------------- Should basically not exist -------------------
     public int GetLayerCount()
     {
         return this.layers.Count;
@@ -122,6 +159,8 @@ public class NeuralNet
     {
         return layers[index];
     }
+
+   
 
 
 

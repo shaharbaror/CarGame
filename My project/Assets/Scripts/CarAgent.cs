@@ -141,12 +141,12 @@ public class CarAgent : MonoBehaviour
             case 0:
 
                 // Hard Acceleration
-                carControl.Accelerate(true);
+                carControl.Accelerate(1);
                 break;
             case 1:
 
                 // Soft Acceleration
-                carControl.Accelerate(false);
+                carControl.Accelerate(0.5f);
                 break;
             case 2:
                 // Soft Brake
@@ -157,7 +157,7 @@ public class CarAgent : MonoBehaviour
                 carControl.Brake(true);
                 break;
             default:
-
+                carControl.Accelerate(0);
                 // Do nothing, keep the same speed
                 break;
         }
@@ -193,9 +193,16 @@ public class CarAgent : MonoBehaviour
 
                     // Get the action form the DQN
                     wheelAction = WheelDqn.GetAction(state);
+                    PreformWheelAction(wheelAction);
+
+                    //// THIS PART IS VERY IMPORTANT BECAUSE IT ONLY WORKS IF THE ROTATION IS ON THE SECOND ELEMENT!!!!!!
+                    //state[1] = carControl.curSteer / carControl.steeringRange;
+                    ////HERERERERERERERE
+                    //// WE WANT THE MOTOR TO PREFORM BASED ON THE STEERING WHEEL DESCISION
+
                     motorAction = MotorDqn.GetAction(state);
                     // Apply the action to the car
-                    PreformWheelAction(wheelAction);
+                   
                     PreformMotorAction(motorAction);
 
                     _actionCount++;
@@ -214,8 +221,8 @@ public class CarAgent : MonoBehaviour
                 CalculateWheelReward();
                 CalculateMotorReward();
                 _currentState = carRaycaster.GetNetworkInput();
-                MotorMemory.PushQueue(new NeuralState(_lastState, motorAction, _motorReward, _currentState, true));
-                WheelMemory.PushQueue(new NeuralState(_lastState, wheelAction, _wheelReward, _currentState, true));
+                MotorMemory.PushQueue(new NeuralState(_lastState, motorAction, _motorReward, _currentState, false));
+                WheelMemory.PushQueue(new NeuralState(_lastState, wheelAction, _wheelReward, _currentState, false));
                 once = false;
             }
 
@@ -251,7 +258,7 @@ public class CarAgent : MonoBehaviour
 
     private void CalculateMotorReward()
     {
-         if (carControl.carSpeed >0.5)
+         if (carControl.carSpeed >0.5f)
             _motorReward += carControl.carSpeed * 0.3f;
         else
         {
@@ -278,13 +285,14 @@ public class CarAgent : MonoBehaviour
         if (carControl.carSpeed > 0)
         {
             float incAmount = Mathf.Pow(distances[1] / distances[0], 2); // adds between 0 to 1 depends on the distance from the center
-            if (incAmount < 0.5)
+            
+            if (incAmount < 0.1)
+            {
+                _wheelReward -= 0.2f;
+            }
+            else if (incAmount < 0.5)
             {
                 _wheelReward += incAmount;
-            }
-            else if (incAmount < 0.1)
-            {
-                _wheelReward -= 0.3f;
             }
             else
             {
@@ -329,7 +337,7 @@ public class CarAgent : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Respawn"))
         {
-            sessionPlaying = true;
+            sessionPlaying = false;
             Debug.Log("FINISHED!");
         }
 

@@ -8,7 +8,7 @@ namespace Assets.Scripts.FileHandler
 {
     public class FileModifier
     {
-        public string filePath = "Assets/Scripts/FileHandler/LongRays/";
+        public string filePath = "Assets/Scripts/FileHandler/HugeNets/";
 
         public void AddTextFile(string text)
         {
@@ -95,18 +95,18 @@ namespace Assets.Scripts.FileHandler
                     {
                         BinaryFormatter binaryFormatter = new BinaryFormatter();
                         NetworkData n = (NetworkData)binaryFormatter.Deserialize(fileStream);
-                        for (int i = 0; i < n.LayerCount; i++) {
-                            float[,] weightus = net.GetLayerIndexWeights(i);
-                            float[] biases = net.GetLayerIndexBiases(i);
-                            for (int j = 0; j < weightus.GetLength(0); j++)
-                            {
-                                for (int k = 0; k < weightus.GetLength(1); k++)
-                                {
-                                    Debug.Log($"<color=green>Current Layer: {weightus[j, k]}, Layer from File: {n.Layers[i].Weights[j, k]}</color> \n");
-                                }
-                                Debug.Log($"<color=red>Current Bias: {biases[j]}, File biases {n.Layers[i].Biases[j]}</color> \n");
-                            }
-                        }
+                        //for (int i = 0; i < n.LayerCount; i++) {
+                        //    float[,] weightus = net.GetLayerIndexWeights(i);
+                        //    float[] biases = net.GetLayerIndexBiases(i);
+                        //    for (int j = 0; j < weightus.GetLength(0); j++)
+                        //    {
+                        //        for (int k = 0; k < weightus.GetLength(1); k++)
+                        //        {
+                        //            Debug.Log($"<color=green>Current Layer: {weightus[j, k]}, Layer from File: {n.Layers[i].Weights[j, k]}</color> \n");
+                        //        }
+                        //        Debug.Log($"<color=red>Current Bias: {biases[j]}, File biases {n.Layers[i].Biases[j]}</color> \n");
+                        //    }
+                        //}
                         tool.DeserializeNetwork(net, n);
                     }
                 }

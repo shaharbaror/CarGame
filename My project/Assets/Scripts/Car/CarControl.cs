@@ -9,8 +9,8 @@ public class CarControl : MonoBehaviour
     public float steeringRangeAtMaxSpeed = 10;
     public float centreOfGravityOffset = -1f;
 
-    public float carSpeed;
-    public float curSteer;
+    public float carSpeed = 0;
+    public float curSteer = 0;
 
     public WheelControl[] wheels;
     Rigidbody rigidBody;
@@ -96,7 +96,7 @@ public class CarControl : MonoBehaviour
 
 
     // a function to operate the car gas
-    public void Accelerate(bool isHard)
+    public void Accelerate(float amount)
     {
         float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
         this.carSpeed = forwardSpeed;
@@ -114,14 +114,9 @@ public class CarControl : MonoBehaviour
         {
             if (wheel.motorized)
             {
-                if (isHard)
-                {
-                    wheel.WheelCollider.motorTorque = currentMotorTorque;
-                }
-                else
-                {
-                    wheel.WheelCollider.motorTorque = currentMotorTorque / 2;
-                }
+                
+                    wheel.WheelCollider.motorTorque = currentMotorTorque * amount;
+               
                 
             }
             wheel.WheelCollider.brakeTorque = 0;
@@ -166,13 +161,13 @@ public class CarControl : MonoBehaviour
         float speedFactor = Mathf.InverseLerp(0, maxSpeed, forwardSpeed);
 
         float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
-        curSteer = currentSteerRange;
 
         foreach (var wheel in wheels)
         {
             if (wheel.steerable)
             {
                 wheel.WheelCollider.steerAngle = amount * currentSteerRange;
+                curSteer = amount * currentSteerRange;
             }
         }
     }

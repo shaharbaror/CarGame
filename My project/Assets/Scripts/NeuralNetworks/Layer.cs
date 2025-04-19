@@ -89,7 +89,8 @@ public class Layer
     {
         // make sure we can set the layer
         if (weights.GetLength(1) != this.Weights.GetLength(1) || weights.GetLength(0) != this.Weights.GetLength(0))
-            throw new System.Exception("Cannot Copy weights, Weights of different sizes");
+            throw new System.Exception($"Cannot Copy weights, Weights of different sizes { this.Weights.GetLength(1) } and {weights.GetLength(1)} \n" +
+                $" and {this.Weights.GetLength(0)} and {weights.GetLength(0) }inputs");
         if (biases.Length != this.Biases.Length)
             throw new System.Exception("Cannot Copy weights, Biases of different sizes");
 

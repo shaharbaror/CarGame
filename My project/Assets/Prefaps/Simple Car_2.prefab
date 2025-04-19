@@ -736,7 +736,7 @@ MonoBehaviour:
   carControl: {fileID: 3871768556047484477}
   carRaycaster: {fileID: 3917961754724406673}
   _inputLayer: 5
-  _layers: 4000000020000000
+  _layers: 800000008000000040000000
   learningRate: 0.8
   discountFactor: 0.99
   epsilon: 0.5

@@ -53,8 +53,13 @@ public class CarSpawner : MonoBehaviour
         cars = new GameObject[carCount];
         carAgents = new CarAgent[carCount];
 
-        _inputLayer = carPrefab.GetComponent<CarRaycaster>().GetInputSize();
-
+        CarRaycaster r = carPrefab.GetComponent<CarRaycaster>();
+            if (r != null)
+            {
+                Debug.Log("tis null");
+            }
+            _inputLayer = r.GetInputSize();
+            
         WheelDqn = new DQN(_inputLayer, _layers, 5, new Dictionary<string, (int, float)>{
             {"learningRate", (0, learningRate)},
             {"discountFactor", (0, discountFactor)},
@@ -106,6 +111,7 @@ public class CarSpawner : MonoBehaviour
     {
         if (toggle)
         {
+            //Debug.Log(carPrefab.GetComponent<CarRaycaster>().GetInputSize());
             bool allCarsStopped = true;
             for (int i = 0; i < carCount && allCarsStopped; i++)
             {
@@ -177,6 +183,13 @@ public class CarSpawner : MonoBehaviour
                 Time.timeScale = 100;
 
             }
+            else if (Input.GetKeyDown(KeyCode.A))
+            {
+                Time.timeScale++;
+            }else if (Input.GetKeyDown(KeyCode.S))
+            {
+                Time.timeScale--;
+            }
             else if (Input.GetKeyDown(KeyCode.T))
             {
                 Time.timeScale = 1;
@@ -220,7 +233,7 @@ public class CarSpawner : MonoBehaviour
         //    carAgents[i] = cars[i].GetComponent<CarAgent>();
         //    carAgents[i].GetData(WheelDqn, MotorDqn);
         //}
-        cars[0] = Instantiate(carPrefab, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(0, 110, 0));
+        cars[0] = Instantiate(carPrefab, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(0, 0, 0));
         carAgents[0] = cars[0].GetComponent<CarAgent>();
         carAgents[0].GetData(WheelDqn, MotorDqn);
 
@@ -234,8 +247,8 @@ public class CarSpawner : MonoBehaviour
     {
         FileModifier fileModifier = new FileModifier();
         int i = EpisodeCount / savingRate;
-        fileModifier.WriteBinFile(WheelDqn.Policy, $"WheelNet2{i}.bin");
-        fileModifier.WriteBinFile(MotorDqn.Policy, $"MotorNet2{i}.bin");
+        fileModifier.WriteBinFile(WheelDqn.Policy, $"WheelNet2-{i}.bin");
+        fileModifier.WriteBinFile(MotorDqn.Policy, $"MotorNet2-{i}.bin");
     }
 
     private void SetTheAgents(Dictionary<string, int> changes)
@@ -250,9 +263,9 @@ public class CarSpawner : MonoBehaviour
     private void GetNets()
     {
         FileModifier fileModifier = new FileModifier();
-        fileModifier.ReadNet(WheelDqn.Policy, "/WheelNet11.bin");
+        fileModifier.ReadNet(WheelDqn.Policy, "WheelNet1-1.bin");
         WheelDqn.UpdateTarget();
-        fileModifier.ReadNet(MotorDqn.Policy, "/MotorNet11.bin");
+        fileModifier.ReadNet(MotorDqn.Policy, "MotorNet1-1.bin");
         MotorDqn.UpdateTarget();
     }
 }

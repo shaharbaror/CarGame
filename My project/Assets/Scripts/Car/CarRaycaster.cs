@@ -8,7 +8,7 @@ public class CarRaycaster : MonoBehaviour
     public float rayHight = 0f;
     public bool isAuto = false;
     public CarControl carControl; // Your car control script
-    private int additionalInputs = 1; // Speed and rotation to wall
+    private int additionalInputs = 2; // Speed and rotation to wall
 
     private float[] rayDistances;
     private RaycastHit[] raycastHits;
@@ -49,7 +49,7 @@ public class CarRaycaster : MonoBehaviour
 public float[] GetRaycastObservationsBadWall()
 {
     float angleStep = rayAngleSpread / (rayCount - 1);
-        Vector3 rayPos = new Vector3(transform.position.x, rayHight, transform.position.z);
+    Vector3 rayPos = new Vector3(transform.position.x, rayHight, transform.position.z);
     for (int i = 0; i < rayCount; i++)
     {
         float angle = -rayAngleSpread / 2 + i * angleStep;
@@ -154,9 +154,12 @@ public float[] GetRaycastObservationsBadWall()
     public float[] GetNetworkInput()
     {
         float speed = carControl.carSpeed / carControl.maxSpeed;
+        float rotations = carControl.curSteer / carControl.steeringRange;
+        
         float[] raycasts = GetRaycastObservationsBadWall();
         float[] networkInput = new float[raycasts.Length + additionalInputs];
         networkInput[0] = speed;
+        networkInput[1] = rotations;
         for (int i = 0; i < raycasts.Length; i++)
         {
             networkInput[i + additionalInputs] = raycasts[i];
@@ -166,6 +169,7 @@ public float[] GetRaycastObservationsBadWall()
 
     public int GetInputSize()
     {
+        //Debug.Log($"giving them {rayCount + additionalInputs} when add is {additionalInputs} and count is {rayCount}");
         return rayCount + additionalInputs;
     }
 
