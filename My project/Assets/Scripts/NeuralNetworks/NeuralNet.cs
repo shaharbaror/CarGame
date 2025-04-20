@@ -50,6 +50,7 @@ public class NeuralNet
     }
 
 
+    ///
     public void Backpropagate(float[] input, float[] targetOutput, float learningRate)
     {
         // Forward pass

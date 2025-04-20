@@ -4,7 +4,7 @@ using UnityEngine;
 public class Actor : DDPGNetwork
 {
    
-    public Actor(int stateSize, int[] hiddenLayers, int actionSize, float tau = 0.001f) : base(tau)
+    public Actor(int stateSize, int[] hiddenLayers, int actionSize, float tau = 0.001f, float learningRate = 0.0005f) : base(tau, learningRate)
     {
         string[] activations = new string[hiddenLayers.Length + 1];
 
@@ -32,6 +32,31 @@ public class Actor : DDPGNetwork
     {
         
         return Policy.ShowResults(state);
+    }
+
+    public float[] GetTargetAction(float[] state)
+    {
+        return Target.ShowResults(state);
+    }
+
+    public void UpdatePolicy(float[] state, float[] actionGradient)
+    {
+        // get the output of the policy network
+        float[] actorOutput = this.GetAction(state);
+
+        // get the output that we want to get to
+        float[] targetOutput = new float[actorOutput.Length];
+
+        // add the gradient to the output for the desired action
+        for (int i=0; i < actorOutput.Length; i++)
+        {
+            targetOutput[i] = actorOutput[i] + _learningRate * actionGradient[i];   
+            targetOutput[i] = Mathf.Clamp(targetOutput[i], -1f, 1f); // clip the action to be between -1 and 1
+        }
+
+        Policy.Backpropagate(state, targetOutput, _learningRate);
+
+
     }
 
 }
