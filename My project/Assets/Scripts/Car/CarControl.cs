@@ -98,6 +98,13 @@ public class CarControl : MonoBehaviour
     // a function to operate the car gas
     public void Accelerate(float amount)
     {
+        // check if the acceleration amount is negative
+        if (amount < 0)
+        {
+            // if negative then brake instead of pressing gas
+            this.Brake(-amount);
+            return;
+        }
         float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
         this.carSpeed = forwardSpeed;
 
@@ -125,7 +132,7 @@ public class CarControl : MonoBehaviour
     }
 
     // a function for operating the brakes of the car
-    public void Brake(bool isHard)
+    private void Brake(float amount)
     {
         float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
         this.carSpeed = forwardSpeed;
@@ -141,10 +148,9 @@ public class CarControl : MonoBehaviour
 
         foreach (var wheel in wheels)
         {
-            if (isHard)
-                wheel.WheelCollider.brakeTorque = brakeTorque;
-            else 
-                wheel.WheelCollider.brakeTorque = brakeTorque / 2;
+
+            wheel.WheelCollider.brakeTorque = brakeTorque * amount;
+            
 
             wheel.WheelCollider.motorTorque = 0;
         }

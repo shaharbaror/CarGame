@@ -15,8 +15,16 @@ public class DQN
     // initialization
     public DQN(int inputLayer, int[] hiddenLayer, int outputLayer, Dictionary<string, (int, float)> parameters)
     {
-        Policy = new NeuralNet(inputLayer, hiddenLayer, outputLayer);
-        Target = new NeuralNet(inputLayer, hiddenLayer, outputLayer);
+        string[] activations = new string[hiddenLayer.Length + 1];
+        for (int i = 0; i < activations.Length; i++)
+        {
+            if (i == activations.Length - 1)
+                activations[i] = "none"; // last layer activation function
+            else
+                activations[i] = "leakyrelu";
+        }
+        Policy = new NeuralNet(inputLayer, hiddenLayer, outputLayer, activations);
+        Target = new NeuralNet(inputLayer, hiddenLayer, outputLayer, activations);
 
         CopyNetworks(Policy, Target);
 

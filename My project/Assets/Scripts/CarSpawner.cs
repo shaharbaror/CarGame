@@ -229,7 +229,7 @@ public class CarSpawner : MonoBehaviour
     {
         //for (int i = 0; i < carCount; i++)
         //{
-        //    cars[i] = Instantiate(carPrefab, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(0,90,0));
+        //    cars[i] = Instantiate(carPrefab, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(0, 90, 0));
         //    carAgents[i] = cars[i].GetComponent<CarAgent>();
         //    carAgents[i].GetData(WheelDqn, MotorDqn);
         //}

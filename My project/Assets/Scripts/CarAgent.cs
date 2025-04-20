@@ -150,11 +150,11 @@ public class CarAgent : MonoBehaviour
                 break;
             case 2:
                 // Soft Brake
-                carControl.Brake(false);
+                carControl.Accelerate(-0.5f);
                 break;
             case 3:
                 // Hard brake
-                carControl.Brake(true);
+                carControl.Accelerate(-1f);
                 break;
             default:
                 carControl.Accelerate(0);

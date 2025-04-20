@@ -51,7 +51,7 @@ class DDPG
         _random = new System.Random();
 
         // Initialize Ornstein-Uhlenbeck noise process
-        _ouNoise = new OUNoise(actionSize, 0.15f, 1.0f, 0.2f);
+        _ouNoise = new OUNoise(actionSize, hyperparameters["mu"].Item2, hyperparameters["theta"].Item2, hyperparameters["sigma"].Item2);
     }
 
     public float[] GetAction(float[] state, bool addNoise = true)

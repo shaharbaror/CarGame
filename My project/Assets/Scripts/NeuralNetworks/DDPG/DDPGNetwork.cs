@@ -18,9 +18,16 @@ public class DDPGNetwork
         Target.SoftUpdate(Policy, _tau);
     }
 
-    public void CopyNetworks()
+    public void CopyTargetNetwork()
     {
         // Clone the policy network to the target network
         Target.CloneNetwork(Policy);
+    }
+
+    public void SetNetworks(DDPGNetwork net)
+    {
+        // set the policy and target networks to be the same as the actor networks
+        Policy.CloneNetwork(net.Policy);
+        Target.CloneNetwork(net.Target);
     }
 }
