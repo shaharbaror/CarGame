@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 public class NeuralNet
 {
     public List<Layer> layers;
@@ -98,6 +99,15 @@ public class NeuralNet
         }
     }
 
+
+    public void AddGradient(NeuralNet gradient)
+    {
+        for (int i = 0; i < layers.Count; i++)
+        {
+            layers[i].AddGradient(gradient.layers[i]);
+        }
+    }
+
     // Soft update the target network weights and biases using a factor tau
     public void SoftUpdate(NeuralNet other, float tau)
     {
@@ -122,6 +132,13 @@ public class NeuralNet
                     thisLayer.Weights[j, k] = (1 - tau) * thisLayer.Weights[j, k] + tau * otherLayer.Weights[j, k];
                 }
             }
+        }
+    }
+    
+    public void CreateGradient(NeuralNet other, int amount)
+    {
+        for (int i = 0; i < layers.Count; i++) {
+            this.layers[i].Gradient(other.layers[i], amount);
         }
     }
 

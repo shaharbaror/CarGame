@@ -3,11 +3,16 @@ using UnityEngine.InputSystem.Controls;
 
 public class Critic : DDPGNetwork
 {
+    private int inputSize;
+    private int[] hiddenLayers;
+    private string[] activations;
 
     public Critic(int inputSize, int actionSize, int[] hiddenLayers, float tau = 0.001f, float learningRate = 0.0005f) : base(tau, learningRate)
     {
+        this.inputSize = actionSize + inputSize;
+        this.hiddenLayers = hiddenLayers;
         
-        string[] activations = new string[hiddenLayers.Length + 1];
+        this.activations = new string[hiddenLayers.Length + 1];
         for (int i = 0; i < activations.Length; i++)
         {
             if (i == activations.Length - 1)
@@ -16,6 +21,8 @@ public class Critic : DDPGNetwork
                 activations[i] = "leakyrelu";
 
         }
+
+        
 
         // For the critic, the input size is the state size + action size
         // This is because the critic takes both the state and action as input and returns the apropriate Q-value based on them
@@ -63,7 +70,29 @@ public class Critic : DDPGNetwork
         // Create a target array with the target Q-value
         float[] targetArr = new float[] { targetQ };
         
+        
+
         Policy.Backpropagate(input, targetArr, _learningRate);
+    }
+
+    public void TrainPolicy(float[][] state, float[][] action, float[] targetQ)
+    {
+        // Combine the state and action into a single input array
+        NeuralNet GradientNet = new NeuralNet(this.inputSize, this.hiddenLayers, 1, activations);
+        GradientNet.CloneNetwork(Policy);
+        
+        for (int i = 0; i < state.Length; i++)
+        {
+            // Combine the state and action into a single input array
+            float[] input = CombineStateAction(state[i], action[i]);
+            // Create a target array with the target Q-value
+            float[] targetArr = new float[] { targetQ[i] };
+            GradientNet.Backpropagate(input, targetArr, _learningRate);
+        }
+
+        GradientNet.CreateGradient(Policy, state.Length);
+        Policy.AddGradient(GradientNet);
+
     }
 
     public float[] GetActionGradient(float[] state, float[] action, float delta = 0.0001f)

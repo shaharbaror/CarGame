@@ -531,15 +531,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.7358551
+      value: 45.72044
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.76
+      value: 0.20000076
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.21628547
+      value: -1.7244875
       objectReference: {fileID: 0}
     - target: {fileID: 4875159363488234399, guid: 99ee31fab8b899c4c87f881a5d4559c6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -706,7 +706,9 @@ MonoBehaviour:
   steeringRangeAtMaxSpeed: 10
   centreOfGravityOffset: -1
   carSpeed: 0
+  prevSpeed: 0
   curSteer: 0
+  prevSteer: 0
   wheels: []
   startingPos: {x: 0, y: 0, z: 0}
   isAI: 1
@@ -722,9 +724,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d88513106f971224a94c9f1c2f983ae6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayCount: 16
+  rayCount: 15
   rayLength: 40
-  rayAngleSpread: 230
+  rayAngleSpread: 180
   rayHight: 0.7
   isAuto: 0
   carControl: {fileID: 5815809132299943859}
@@ -740,6 +742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2165713e4250d1548855a9ad765e114d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sessionRunning: 1
   isAI: 1
 --- !u!4 &776341420089443876 stripped
 Transform:

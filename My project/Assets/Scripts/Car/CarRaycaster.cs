@@ -8,7 +8,7 @@ public class CarRaycaster : MonoBehaviour
     public float rayHight = 0f;
     public bool isAuto = false;
     public CarControl carControl; // Your car control script
-    private int additionalInputs = 2; // Speed and rotation to wall
+    private int additionalInputs = 4; // Speed rotation aceleration and distance to wall
 
     private float[] rayDistances;
     private RaycastHit[] raycastHits;
@@ -117,7 +117,7 @@ public float[] GetRaycastObservationsBadWall()
                 rayDistances[i] = 1f; // Max distance if no hit
             }
         }
-        return rayDistances;
+        return rayDistances;    // [0] is left, [1] is right
     }
 
     public float[] GetRaycastObservations()
@@ -155,11 +155,19 @@ public float[] GetRaycastObservationsBadWall()
     {
         float speed = carControl.carSpeed / carControl.maxSpeed;
         float rotations = carControl.curSteer / carControl.steeringRange;
-        
+        float acceleration = (carControl.carSpeed - carControl.prevSpeed) / Time.deltaTime / 5f; // Normalized acceleration
+
+        float[] sides = GetSides();
+        float centeringMetric = Mathf.Min(sides[0], sides[1]) / Mathf.Max(sides[0], sides[1]);
+
         float[] raycasts = GetRaycastObservationsBadWall();
+        
         float[] networkInput = new float[raycasts.Length + additionalInputs];
         networkInput[0] = speed;
         networkInput[1] = rotations;
+        networkInput[2] = acceleration;
+        networkInput[3] = centeringMetric;
+
         for (int i = 0; i < raycasts.Length; i++)
         {
             networkInput[i + additionalInputs] = raycasts[i];

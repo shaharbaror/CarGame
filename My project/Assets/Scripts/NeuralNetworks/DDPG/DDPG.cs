@@ -111,8 +111,23 @@ class DDPG
         _critic.SoftUpdateTarget();
     }
 
+    // training the DDPG with an already set batch of experiences
+    public void Train(ContinuousNeuralState[] batch)
+    {
+
+        TrainCritic(batch);
+        TrainActor(batch);
+        // Update target networks
+        _actor.SoftUpdateTarget();
+        _critic.SoftUpdateTarget();
+    }
+
     private void TrainCritic(ContinuousNeuralState[] batch)
     {
+        //List<float[]> batchStates = new List<float[]>();
+        //List<float[]> batchActions = new List<float[]>();
+        //List<float> batchRewards = new List<float>();
+
         foreach (ContinuousNeuralState experience in batch)
         {
             if (experience == null || experience.newState == null)
@@ -131,14 +146,21 @@ class DDPG
                 float[] nextAction = _actor.GetTargetAction(experience.newState);
                 targetQ += _discountFactor * _critic.GetTargetQValue(experience.newState, nextAction);
 
+            } else
+            {
+                Debug.Log($"Experience terminated, reward is: {experience.reward}");
             }
 
 
-            // Get the current Q value from the critic network
-            float currentQ = _critic.GetQValue(experience.state, experience.action);
-
-            _critic.TrainPolicy(experience.state, experience.action, targetQ); // Train the critic network using the input and target Q value
+                // Get the current Q value from the critic network
+                //batchStates.Add(experience.state);
+                //batchActions.Add(experience.action);
+                //batchRewards.Add(targetQ);
+                _critic.TrainPolicy(experience.state, experience.action, targetQ); // Train the critic network using the input and target Q value
         }
+
+        //_critic.TrainPolicy(batchStates.ToArray(), batchActions.ToArray(), batchRewards.ToArray());
+
     }
 
     private void TrainActor(ContinuousNeuralState[] batch)

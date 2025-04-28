@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DDPGTrainer">
+    <Position X="20.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQgSCUFBCAwAgIUYAQAIBAAAJAAAAgAAAAAAQIACAA=</HashCode>
+      <FileName>Assets\Scripts\DDPGTrainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CarActor">
+    <Position X="19" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IIQAAQDAAAggCQEiAAGEBAAgAAAAAAAoQJAAEEAAgEA=</HashCode>
+      <FileName>Assets\Scripts\CarActor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CarControl">
+    <Position X="15.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQIAAAAACAAAAQAAAgABAAgCAAQAAAAQKAgEQGBABA=</HashCode>
+      <FileName>Assets\Scripts\Car\CarControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CarRaycaster">
+    <Position X="17.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAQAAACAAGkAAQBABAAAAQCAAAACAAIAACAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Car\CarRaycaster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WheelControl">
+    <Position X="13.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAEACIIAAABAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Car\WheelControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Actor">
+    <Position X="29.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAIAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\DDPG\Actor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AgentDDPG">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABBgiAEAQAAAAAAAAAIAAAAgAgAAAAAAAAE=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\DDPG\AgentDDPG.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Critic">
+    <Position X="32" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAIEAAAAgQAAAAAAAIQAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\DDPG\Critic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DDPG">
+    <Position X="12" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAABBggEACAAEAAAAAAgIAAEAhAAAAAAAAAEE=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\DDPG\DDPG.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DDPGNetwork">
+    <Position X="30" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAABAAAgAAAAIAACAAAAAAAAAAAAAAAAIAAAQ=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\DDPG\DDPGNetwork.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.NeuralNetworks.Activations.ActivationFunction">
+    <Position X="22.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\Activations\ActivationFunction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.NeuralNetworks.Activations.LeakyReLUActivation" Collapsed="true">
+    <Position X="24.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAABAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\Activations\LeakyReLUActivation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.NeuralNetworks.Activations.NoActivation" Collapsed="true">
+    <Position X="24.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\Activations\NoActivation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.NeuralNetworks.Activations.ReLUActivation" Collapsed="true">
+    <Position X="24.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\Activations\ReLUActivation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.NeuralNetworks.Activations.SigmoidActivation" Collapsed="true">
+    <Position X="26" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\Activations\SigmoidActivation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.NeuralNetworks.Activations.TanhActivation" Collapsed="true">
+    <Position X="26" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\Activations\TanhActivation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NeuralState" Collapsed="true">
+    <Position X="28" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBBAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAIA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\DeQue\NeuralState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ContinuousNeuralState">
+    <Position X="28" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\DeQue\ContinuousNeuralState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Deque">
+    <Position X="26" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAABAAAABAAAAAAACCAAAEAAAAAAAACAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\DeQue\Deque.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SpecialQueue">
+    <Position X="28" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIABAABAAAAAAAAACAABgAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\DeQue\SpecialQueue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QueueIterator">
+    <Position X="28" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAACAABAAAAADAAAAAAAAAAAAAoAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\DeQue\QueueIterator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Assets.Scripts.NeuralNetworks.WeightInits.WeightInitializer">
+    <Position X="23.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\WeightInits\WeightInitializer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.NeuralNetworks.WeightInits.HeInitializer">
+    <Position X="22.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\WeightInits\HeInitializer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.NeuralNetworks.WeightInits.XavierInitializer">
+    <Position X="24.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAABAAAAAAAAAAAAAQAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\WeightInits\XavierInitializer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Assets.Scripts.FileHandler.FileModifier">
+    <Position X="29.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAACAIAAAAAAAAAAAAAAACAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\FileHandler\FileModifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NeuralNet">
+    <Position X="13.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAABIoAACAgBAAAAABAAQAAAAAAEABAEQABA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\NeuralNet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Layer">
+    <Position X="17.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAgEAAAABggAEAAAGAAAAAAAAAAEABAEAAAABAEAA=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\Layer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OUNoise">
+    <Position X="32" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAQAAAAAAABAAAAAAACABAABAAAAAAAAAAAQAAAAE=</HashCode>
+      <FileName>Assets\Scripts\NeuralNetworks\DDPG\OUNoise.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

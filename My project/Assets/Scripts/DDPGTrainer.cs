@@ -11,7 +11,7 @@ public class DDPGTrainer : MonoBehaviour
     [Space(5)]
         public GameObject carPrefab;
         public int carCount = 1;
-        public float maxActions = 5; // The maximum number of actions the car can take
+        public int maxActions = 5; // The maximum number of actions the car can take
         public float actionsPerSecond = 5; // The number of actions the car can take per second
         public float spawnRadius = 1f;
 
@@ -32,24 +32,34 @@ public class DDPGTrainer : MonoBehaviour
     [Header("Hyperparameters")]
     [Space(5)]
 
-        public float actorLearningRate = 0.001f;
+        public float actorLearningRate = 0.0003f;
         public float criticLearningRate = 0.001f;
-        public float discountFactor = 0.99f;
-        public float tau = 0.01f;
+        public float discountFactor = 0.98f;
+        public float tau = 0.005f;
         public int replayMemorySize = 10000;
-        public int batchSize = 64;
-        public float noiseStdDev = 0.2f;
+        public int batchSize = 128;
+        public float noiseStdDev = 0.3f;
+
+    public int minimumExperiences = 2000; 
 
     [Header("Noise Parameters")]
     [Space(5)]
         [SerializeField]
-        private float _mu = 0.15f;
+        private float _mu = 0.0f;
 
         [SerializeField]
-        private float _theta = 1.0f;
+        private float _theta = 0.15f;
 
         [SerializeField]
-        private float _sigma = 0.2f;
+        private float _sigma = 0.3f;
+
+        public float decayRate = 0.995f;
+
+
+    [Header("Training Parameters")]
+    [Space(5)]
+    public int episodeCount;
+    public int trainingCount;
 
     private Dictionary<string, (int, float)> _hyperParameters;
 
@@ -102,31 +112,67 @@ public class DDPGTrainer : MonoBehaviour
 
             _carActors[i] = _cars[i].GetComponent<CarActor>();
             Debug.Log(_hyperParameters);
-            _carActors[i].Initialize(_inputLayer, ActorLayers, 2, _hyperParameters);
+            _carActors[i].Initialize(_inputLayer, ActorLayers, 2, _hyperParameters, maxActions, 1f / actionsPerSecond);
         }
     }
 
 
     public void Update()
     {
-        bool areDone = true;
-        foreach (CarActor actor in _carActors) 
+        foreach (CarActor actor in _carActors)
         {
-            if (actor.sessionRunning)
+            if (!actor.once)
             {
-                areDone = false;
-                break;
+                episodeCount++;
+                if (episodeCount % 10 == 0 && noiseStdDev > 0.05)
+                {
+                    // update the noiseStdDev
+                    noiseStdDev = noiseStdDev * decayRate;
+                }
+
+                if (actor.Agent.Memory.Length() > minimumExperiences)
+                {
+                    // get the batch of experiences
+                    ContinuousNeuralState[] batch = actor.GetBatch();
+                    trainingCount++;
+                    // train the network on that batch
+                    TrainNetwork(batch);
+                }
+
+                // transfer the new weights and noiseStd to the agents
+                actor.UpdateAgent(_ddpg.Actor, noiseStdDev);
+                actor.ResetCar();
+
             }
         }
+    
 
         // add some training in the process
+        
 
-        if (areDone)
+
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            foreach (CarActor actor in _carActors)
-            {
-                actor.ResetCar();
-            }
+            Time.timeScale += 1;
         }
+        else if (Input.GetKeyDown(KeyCode.O))
+        {
+            Time.timeScale -= 1;
+        }
+        else if (Input.GetKeyDown(KeyCode.L))
+        {
+            Time.timeScale += 10;
+        }
+        else if (Input.GetKeyDown(KeyCode.K))
+        {
+            Time.timeScale -= 10;
+        }
+    }
+
+
+    private void TrainNetwork(ContinuousNeuralState[] batch)
+    {
+        // Train the DDPG network using the batch of experiences
+        _ddpg.Train(batch);
     }
 }
