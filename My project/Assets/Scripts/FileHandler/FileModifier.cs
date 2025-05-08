@@ -8,7 +8,7 @@ namespace Assets.Scripts.FileHandler
 {
     public class FileModifier
     {
-        public string filePath = "Assets/Scripts/FileHandler/HugeNets/";
+        public string filePath = "Assets/Scripts/FileHandler/";
 
         public void AddTextFile(string text)
         {
@@ -82,6 +82,8 @@ namespace Assets.Scripts.FileHandler
             }
             return false;
         }
+
+
 
 
         public void ReadNet(NeuralNet net, string fileName)

@@ -47,25 +47,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carPrefab: {fileID: 111972907272035486, guid: 22668af8d303f654bac466044f714c4b, type: 3}
   carCount: 5
-  maxActions: 150
-  actionsPerSecond: 15
-  spawnRadius: 2
+  maxActions: 400
+  actionsPerSecond: 10
+  spawnRadius: 4
   _inputLayer: 0
-  ActorLayers: 8000000080000000
-  CriticLayers: 8000000080000000
-  actorLearningRate: 0.001
+  ActorLayers: 000100008000000040000000
+  CriticLayers: 000100000001000080000000
+  actorLearningRate: 0.0003
   criticLearningRate: 0.001
-  discountFactor: 0.99
+  discountFactor: 0.98
   tau: 0.005
-  replayMemorySize: 20000
-  batchSize: 64
+  replayMemorySize: 10000
+  batchSize: 128
   noiseStdDev: 0.3
-  minimumExperiences: 1000
-  _mu: 0.15
-  _theta: 1
-  _sigma: 0.2
-  decayRate: 0.998
+  minimumExperiences: 2000
+  _mu: 0
+  _theta: 0.15
+  _sigma: 0.3
+  decayRate: 0.995
   episodeCount: 0
+  trainingCount: 0
+  savingRate: 1000
 --- !u!1001 &3098304301319307716
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -122,6 +124,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4425285802755721601, guid: 22668af8d303f654bac466044f714c4b, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -8054476431548682301, guid: 093a2611200c17b4a84a3dc0e0f5e6c2, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

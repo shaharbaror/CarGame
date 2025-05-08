@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Assets.Scripts.FileHandler;
+using UnityEngine.UIElements;
 
 public class DDPGTrainer : MonoBehaviour
 {
@@ -61,6 +63,9 @@ public class DDPGTrainer : MonoBehaviour
     public int episodeCount;
     public int trainingCount;
 
+    [Header("Debugging")]
+    public int savingRate;
+
     private Dictionary<string, (int, float)> _hyperParameters;
 
     private void Start()
@@ -96,6 +101,7 @@ public class DDPGTrainer : MonoBehaviour
         // initialize all the arrays that store the cars info
         _cars = new GameObject[carCount];
         _carActors = new CarActor[carCount];
+        ReadFromFile();
 
         SpawnCars();
     }
@@ -119,31 +125,52 @@ public class DDPGTrainer : MonoBehaviour
 
     public void Update()
     {
-        foreach (CarActor actor in _carActors)
+        bool allCarsDone = true;
+        foreach (CarActor c in _carActors)
         {
-            if (!actor.once)
+            if (c.once)
             {
-                episodeCount++;
-                if (episodeCount % 10 == 0 && noiseStdDev > 0.05)
-                {
-                    // update the noiseStdDev
-                    noiseStdDev = noiseStdDev * decayRate;
-                }
-
-                if (actor.Agent.Memory.Length() > minimumExperiences)
-                {
-                    // get the batch of experiences
-                    ContinuousNeuralState[] batch = actor.GetBatch();
-                    trainingCount++;
-                    // train the network on that batch
-                    TrainNetwork(batch);
-                }
-
-                // transfer the new weights and noiseStd to the agents
-                actor.UpdateAgent(_ddpg.Actor, noiseStdDev);
-                actor.ResetCar();
-
+                allCarsDone = false;
+                break;
             }
+        }
+
+        if (allCarsDone)
+        {
+
+
+            foreach (CarActor actor in _carActors)
+            {
+                
+                    episodeCount++;
+
+                    if (episodeCount % savingRate == 0)
+                    {
+                        // save the weights of the actor and critic networks
+                        WriteToFiles();
+                    }
+
+                    if (episodeCount % 100 == 0 && noiseStdDev > 0.05)
+                    {
+                        // update the noiseStdDev
+                        noiseStdDev = noiseStdDev * decayRate;
+                    }
+
+                    if (actor.Agent.Memory.Length() > minimumExperiences)
+                    {
+                        // get the batch of experiences
+                        ContinuousNeuralState[] batch = actor.GetBatch();
+                        trainingCount++;
+                        // train the network on that batch
+                        TrainNetwork(batch);
+                    }
+
+                    // transfer the new weights and noiseStd to the agents
+                    actor.UpdateAgent(_ddpg.Actor, noiseStdDev);
+                    actor.ResetCar();
+
+                }
+            
         }
     
 
@@ -174,5 +201,21 @@ public class DDPGTrainer : MonoBehaviour
     {
         // Train the DDPG network using the batch of experiences
         _ddpg.Train(batch);
+    }
+
+    private void WriteToFiles()
+    {
+        FileModifier modifier = new FileModifier();
+        modifier.WriteBinFile(_ddpg.Actor.Policy, $"DDPG/4Actor-{(int)(episodeCount/savingRate)}.bin");
+        modifier.WriteBinFile(_ddpg.Critic.Policy, $"DDPG/4Critic-{(int)(episodeCount/savingRate)}.bin");
+    }
+
+    private void ReadFromFile()
+    {
+        FileModifier modifier = new FileModifier();
+        modifier.ReadNet(_ddpg.Actor.Policy, "DDPG/2Actor-18.bin");
+        _ddpg.Actor.CopyTargetNetwork();
+        modifier.ReadNet(_ddpg.Critic.Policy, "DDPG/2Critic-18.bin");
+        _ddpg.Critic.CopyTargetNetwork();
     }
 }

@@ -194,7 +194,7 @@ public class CarActor : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("BadWall"))
         {
-            _reward -= 10f;
+            _reward -= 2f;
             this.sessionRunning = false;
 
         }
