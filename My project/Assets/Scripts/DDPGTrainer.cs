@@ -114,8 +114,8 @@ public class DDPGTrainer : MonoBehaviour
             float xRange = Random.Range(-spawnRadius, spawnRadius);
             float zRange = Random.Range(-spawnRadius, spawnRadius);
 
+            //_cars[i] = Instantiate(carPrefab, new Vector3(transform.position.x + xRange, 0.2f, transform.position.z + zRange), Quaternion.Euler(0, i%2==0? 45: -135, 0));
             _cars[i] = Instantiate(carPrefab, new Vector3(transform.position.x + xRange, 0.2f, transform.position.z + zRange), Quaternion.Euler(0, 90, 0));
-
             _carActors[i] = _cars[i].GetComponent<CarActor>();
             Debug.Log(_hyperParameters);
             _carActors[i].Initialize(_inputLayer, ActorLayers, 2, _hyperParameters, maxActions, 1f / actionsPerSecond);
@@ -165,11 +165,16 @@ public class DDPGTrainer : MonoBehaviour
                         TrainNetwork(batch);
                     }
 
-                    // transfer the new weights and noiseStd to the agents
-                    actor.UpdateAgent(_ddpg.Actor, noiseStdDev);
-                    actor.ResetCar();
+                    
 
-                }
+            }
+
+            foreach (CarActor actor in _carActors)
+            {
+                // transfer the new weights and noiseStd to the agents
+                actor.UpdateAgent(_ddpg.Actor, noiseStdDev);
+                actor.ResetCar();
+            }
             
         }
     
@@ -206,16 +211,16 @@ public class DDPGTrainer : MonoBehaviour
     private void WriteToFiles()
     {
         FileModifier modifier = new FileModifier();
-        modifier.WriteBinFile(_ddpg.Actor.Policy, $"DDPG/4Actor-{(int)(episodeCount/savingRate)}.bin");
-        modifier.WriteBinFile(_ddpg.Critic.Policy, $"DDPG/4Critic-{(int)(episodeCount/savingRate)}.bin");
+        modifier.WriteBinFile(_ddpg.Actor.Policy, $"DDPG/Another/7Actor-{(int)(episodeCount / savingRate)}.bin");
+        modifier.WriteBinFile(_ddpg.Critic.Policy, $"DDPG/Another/7Critic-{(int)(episodeCount / savingRate)}.bin");
     }
 
     private void ReadFromFile()
     {
         FileModifier modifier = new FileModifier();
-        modifier.ReadNet(_ddpg.Actor.Policy, "DDPG/2Actor-18.bin");
+        modifier.ReadNet(_ddpg.Actor.Policy, "DDPG/Another/6Actor-12.bin");
         _ddpg.Actor.CopyTargetNetwork();
-        modifier.ReadNet(_ddpg.Critic.Policy, "DDPG/2Critic-18.bin");
+        modifier.ReadNet(_ddpg.Critic.Policy, "DDPG/Another/6Critic-12.bin");
         _ddpg.Critic.CopyTargetNetwork();
     }
 }
