@@ -717,7 +717,9 @@ MonoBehaviour:
   steeringRangeAtMaxSpeed: 10
   centreOfGravityOffset: -1
   carSpeed: 0
+  prevSpeed: 0
   curSteer: 0
+  prevSteer: 0
   wheels: []
   startingPos: {x: 0, y: 0, z: 0}
   isAI: 1
@@ -736,7 +738,7 @@ MonoBehaviour:
   carControl: {fileID: 3871768556047484477}
   carRaycaster: {fileID: 3917961754724406673}
   _inputLayer: 5
-  _layers: 4000000020000000
+  _layers: 800000004000000020000000
   learningRate: 0.8
   discountFactor: 0.99
   epsilon: 0.5

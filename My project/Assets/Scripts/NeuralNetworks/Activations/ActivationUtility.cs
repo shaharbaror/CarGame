@@ -16,6 +16,7 @@ namespace Assets.Scripts.NeuralNetworks.Activations
                 "sigmoid" => new SigmoidActivation(),
                 "none" => new NoActivation(),
                 "leakyrelu" => new LeakyReLUActivation(),
+                "tanh" => new TanhActivation(),
                 _ => new ReLUActivation() // Default
             };
         }

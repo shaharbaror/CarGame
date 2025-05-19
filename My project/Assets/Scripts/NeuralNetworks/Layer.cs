@@ -63,7 +63,8 @@ public class Layer
         if (inputs.Length != InputSize)
         {
             
-            Debug.LogError("Input size does not match the layer size");
+            Debug.LogError($"Input size {inputs.Length} does not match the layer size {InputSize}");
+
         }
         this.LastInputs = inputs;
         float[] outputs = new float[NeuronCount];
@@ -89,7 +90,8 @@ public class Layer
     {
         // make sure we can set the layer
         if (weights.GetLength(1) != this.Weights.GetLength(1) || weights.GetLength(0) != this.Weights.GetLength(0))
-            throw new System.Exception("Cannot Copy weights, Weights of different sizes");
+            throw new System.Exception($"Cannot Copy weights, Weights of different sizes { this.Weights.GetLength(1) } and {weights.GetLength(1)} \n" +
+                $" and {this.Weights.GetLength(0)} and {weights.GetLength(0) }inputs");
         if (biases.Length != this.Biases.Length)
             throw new System.Exception("Cannot Copy weights, Biases of different sizes");
 
@@ -102,6 +104,39 @@ public class Layer
             this.Biases[i] = biases[i];
         }
     
+    }
+
+    // calculate the average gradient of this network
+    public void Gradient(Layer other, int amount)
+    {
+        // sub the weights and biases and then divideds by the amount
+        
+        for (int i = 0; i < this.Weights.GetLength(0); i++)
+        {
+            for (int j = 0; j < this.Weights.GetLength(1); j++)
+            {
+                this.Weights[i, j] -= other.Weights[i, j];
+                this.Weights[i, j] /= amount;
+            }
+            this.Biases[i] -= other.Biases[i];
+            this.Biases[i] /= amount;
+        
+        
+        }
+    }
+
+    public void AddGradient(Layer other)
+    {
+        for (int i = 0; i < this.Weights.GetLength(0); i++)
+        {
+            for (int j = 0; j < this.Weights.GetLength(1); j++)
+            {
+                this.Weights[i, j] += other.Weights[i, j];
+               
+            }
+            this.Biases[i] += other.Biases[i];
+
+        }
     }
 
     public int GetNeuronCount() { return NeuronCount; }

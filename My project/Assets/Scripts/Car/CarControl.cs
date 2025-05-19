@@ -9,14 +9,18 @@ public class CarControl : MonoBehaviour
     public float steeringRangeAtMaxSpeed = 10;
     public float centreOfGravityOffset = -1f;
 
-    public float carSpeed;
-    public float curSteer;
+    public float carSpeed = 0;
+    public float prevSpeed = 0;
+    public float curSteer = 0;
+    public float prevSteer = 0;
 
     public WheelControl[] wheels;
     Rigidbody rigidBody;
 
     public Vector3 startingPos;
     private Quaternion startingRot;
+
+    //public float currentTorque = 0;
 
     public bool isAI = true;
 
@@ -96,8 +100,16 @@ public class CarControl : MonoBehaviour
 
 
     // a function to operate the car gas
-    public void Accelerate(bool isHard)
+    public void Accelerate(float amount)
     {
+        this.prevSpeed = this.carSpeed;
+        // check if the acceleration amount is negative
+        if (amount < 0)
+        {
+            // if negative then brake instead of pressing gas
+            this.Brake(-amount);
+            return;
+        }
         float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
         this.carSpeed = forwardSpeed;
 
@@ -108,20 +120,15 @@ public class CarControl : MonoBehaviour
 
         // Use that to calculate how much torque is available 
         // (zero torque at top speed)
-        float currentMotorTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
+        float currentTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
 
         foreach (var wheel in wheels)
         {
             if (wheel.motorized)
             {
-                if (isHard)
-                {
-                    wheel.WheelCollider.motorTorque = currentMotorTorque;
-                }
-                else
-                {
-                    wheel.WheelCollider.motorTorque = currentMotorTorque / 2;
-                }
+                
+                    wheel.WheelCollider.motorTorque = currentTorque * amount;
+               
                 
             }
             wheel.WheelCollider.brakeTorque = 0;
@@ -130,8 +137,9 @@ public class CarControl : MonoBehaviour
     }
 
     // a function for operating the brakes of the car
-    public void Brake(bool isHard)
+    private void Brake(float amount)
     {
+        this.prevSpeed = this.carSpeed;
         float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
         this.carSpeed = forwardSpeed;
 
@@ -142,14 +150,14 @@ public class CarControl : MonoBehaviour
 
         // Use that to calculate how much torque is available 
         // (zero torque at top speed)
-        float currentMotorTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
+        float currentTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
+        
 
         foreach (var wheel in wheels)
         {
-            if (isHard)
-                wheel.WheelCollider.brakeTorque = brakeTorque;
-            else 
-                wheel.WheelCollider.brakeTorque = brakeTorque / 2;
+
+            wheel.WheelCollider.brakeTorque = brakeTorque * amount;
+            
 
             wheel.WheelCollider.motorTorque = 0;
         }
@@ -158,6 +166,7 @@ public class CarControl : MonoBehaviour
     // a function to handle turning wheels
     public void TurnWheel(float amount)
     {
+        prevSteer = curSteer;
         float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
 
 
@@ -166,15 +175,16 @@ public class CarControl : MonoBehaviour
         float speedFactor = Mathf.InverseLerp(0, maxSpeed, forwardSpeed);
 
         float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
-        curSteer = currentSteerRange;
 
         foreach (var wheel in wheels)
         {
             if (wheel.steerable)
             {
                 wheel.WheelCollider.steerAngle = amount * currentSteerRange;
+                
             }
         }
+        curSteer = amount * currentSteerRange;
     }
 
     public void ResetCar()

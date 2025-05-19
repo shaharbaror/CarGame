@@ -15,8 +15,16 @@ public class DQN
     // initialization
     public DQN(int inputLayer, int[] hiddenLayer, int outputLayer, Dictionary<string, (int, float)> parameters)
     {
-        Policy = new NeuralNet(inputLayer, hiddenLayer, outputLayer);
-        Target = new NeuralNet(inputLayer, hiddenLayer, outputLayer);
+        string[] activations = new string[hiddenLayer.Length + 1];
+        for (int i = 0; i < activations.Length; i++)
+        {
+            if (i == activations.Length - 1)
+                activations[i] = "none"; // last layer activation function
+            else
+                activations[i] = "leakyrelu";
+        }
+        Policy = new NeuralNet(inputLayer, hiddenLayer, outputLayer, activations);
+        Target = new NeuralNet(inputLayer, hiddenLayer, outputLayer, activations);
 
         CopyNetworks(Policy, Target);
 
@@ -192,16 +200,26 @@ public class DQN
         //Debug.Log("Teaching the Network");
         foreach (NeuralState batch in batchs)
         {
+            if (batch.state == null)
+            {
+                continue;
+            }
             float targetValue = 0;
             if (!batch.terminated)
             {
                 float[] options = this.Target.ShowResults(batch.newState);
-                targetValue = batch.reward + this.discountFactor * options[PreformEpsilonGreedy(options)];
+                int best_action = 0;
+                for (int i = 1; i < options.Length; i++) {
+                    if (options[i] > options[best_action])
+                    {
+                        best_action = i;
+                    }
+                }
+                //targetValue = batch.reward + this.discountFactor * options[PreformEpsilonGreedy(options)];
+                // targetValue +=this.discountFactor * this.Target.ShowResults(batch.state)[best_action];             // DDQN
+                targetValue = batch.reward + this.discountFactor * options[best_action];
             }
-            if (batch.state== null)
-            {
-                continue;
-            }
+            
             float[] currentQValues = this.Policy.ShowResults(batch.state);
 
             float[] targetQValues = (float[])currentQValues.Clone();
