@@ -2938,6 +2938,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DDPG trainer
       objectReference: {fileID: 0}
+    - target: {fileID: 7383412423324383761, guid: 5033940724224d644a9a99a9824127f5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3794,6 +3798,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6672487467296947879, guid: c4f49904d9d0ee7428d9963f2ee72c9a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6747251242806939014, guid: c4f49904d9d0ee7428d9963f2ee72c9a, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -3804,7 +3812,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6757957270632380538, guid: c4f49904d9d0ee7428d9963f2ee72c9a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8638352918254940888, guid: c4f49904d9d0ee7428d9963f2ee72c9a, type: 3}
+      propertyPath: carCount
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8638352918254940888, guid: c4f49904d9d0ee7428d9963f2ee72c9a, type: 3}
       propertyPath: carPrefab

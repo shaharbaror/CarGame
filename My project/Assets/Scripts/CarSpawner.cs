@@ -233,7 +233,7 @@ public class CarSpawner : MonoBehaviour
         //    carAgents[i] = cars[i].GetComponent<CarAgent>();
         //    carAgents[i].GetData(WheelDqn, MotorDqn);
         //}
-        cars[0] = Instantiate(carPrefab, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(0, 0, 0));
+        cars[0] = Instantiate(carPrefab, new Vector3(transform.position.x, 0.2f, transform.position.z), Quaternion.Euler(0, 90, 0));
         carAgents[0] = cars[0].GetComponent<CarAgent>();
         carAgents[0].GetData(WheelDqn, MotorDqn);
 
@@ -245,10 +245,10 @@ public class CarSpawner : MonoBehaviour
 
     private void SaveNets()
     {
-        FileModifier fileModifier = new FileModifier();
-        int i = EpisodeCount / savingRate;
-        fileModifier.WriteBinFile(WheelDqn.Policy, $"WheelNet2-{i}.bin");
-        fileModifier.WriteBinFile(MotorDqn.Policy, $"MotorNet2-{i}.bin");
+        //FileModifier fileModifier = new FileModifier();
+        //int i = EpisodeCount / savingRate;
+        //fileModifier.WriteBinFile(WheelDqn.Policy, $"WheelNet2-{i}.bin");
+        //fileModifier.WriteBinFile(MotorDqn.Policy, $"MotorNet2-{i}.bin");
     }
 
     private void SetTheAgents(Dictionary<string, int> changes)
@@ -262,10 +262,10 @@ public class CarSpawner : MonoBehaviour
 
     private void GetNets()
     {
-        FileModifier fileModifier = new FileModifier();
-        fileModifier.ReadNet(WheelDqn.Policy, "WheelNet1-1.bin");
-        WheelDqn.UpdateTarget();
-        fileModifier.ReadNet(MotorDqn.Policy, "MotorNet1-1.bin");
-        MotorDqn.UpdateTarget();
+        //    FileModifier fileModifier = new FileModifier();
+        //    fileModifier.ReadNet(WheelDqn.Policy, "WheelNet1-1.bin");
+        //    WheelDqn.UpdateTarget();
+        //    fileModifier.ReadNet(MotorDqn.Policy, "MotorNet1-1.bin");
+        //    MotorDqn.UpdateTarget();
     }
 }

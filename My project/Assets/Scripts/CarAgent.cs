@@ -284,13 +284,10 @@ public class CarAgent : MonoBehaviour
         float[] distances = carRaycaster.GetSides();
         if (carControl.carSpeed > 0)
         {
-            float incAmount = Mathf.Pow(distances[1] / distances[0], 2); // adds between 0 to 1 depends on the distance from the center
+            float incAmount = Mathf.Pow(Mathf.Min(distances[0],distances[1]) / Mathf.Max(distances[0], distances[1]), 2); // adds between 0 to 1 depends on the distance from the center
             
-            if (incAmount < 0.1)
-            {
-                _wheelReward -= 0.2f;
-            }
-            else if (incAmount < 0.5)
+           
+            if (incAmount > 0.5)
             {
                 _wheelReward += incAmount;
             }

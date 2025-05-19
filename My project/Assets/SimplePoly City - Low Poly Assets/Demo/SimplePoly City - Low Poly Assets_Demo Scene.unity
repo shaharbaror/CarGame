@@ -78912,6 +78912,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DDPG trainer
       objectReference: {fileID: 0}
+    - target: {fileID: 7383412423324383761, guid: 5033940724224d644a9a99a9824127f5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
